@@ -2,11 +2,10 @@
   "name": "tennis-app",
   "version": "1.0.0",
   "description": "A web app to display data from Google Sheets",
-  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "node start-app.js",
@@ -37,7 +36,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
   "engines": {
     "node": ">=18.0.0"
   }
