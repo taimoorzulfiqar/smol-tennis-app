@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
 
 export default async function handler(req, res) {
-  // Enable CORS
+  // Enable CORS for production
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -37,8 +37,9 @@ export default async function handler(req, res) {
         if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
           serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
         } else {
+          console.error('Service account key not found in environment variables');
           return res.status(500).json({ 
-            error: 'Service account configuration not found. Please set GOOGLE_SERVICE_ACCOUNT_KEY environment variable.' 
+            error: 'Service account configuration not found. Please set GOOGLE_SERVICE_ACCOUNT_KEY environment variable in Vercel.' 
           });
         }
         
@@ -54,7 +55,7 @@ export default async function handler(req, res) {
       } catch (serviceAccountError) {
         console.error('Service account error:', serviceAccountError);
         return res.status(500).json({ 
-          error: 'Service account configuration error. Please check your service account configuration.' 
+          error: 'Service account configuration error. Please check your service account configuration in Vercel environment variables.' 
         });
       }
     } else {

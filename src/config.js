@@ -36,7 +36,7 @@ const config = {
   range: 'Men!A:Z',
   
   // Set to true to use Service Account (recommended), false to use API Key
-  useServiceAccount: true,
+  useServiceAccount: false,
   
   // API Base URL - handles both development and production
   apiBaseUrl: process.env.NODE_ENV === 'production' 

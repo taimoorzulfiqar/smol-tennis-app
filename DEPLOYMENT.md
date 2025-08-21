@@ -1,93 +1,96 @@
-# Vercel Deployment Guide
+# Production Deployment Guide
 
-## 🚀 **Deploy to Vercel**
+## Current Issue: "Failed to fetch sheet data" in Production
 
-### **Step 1: Connect to Vercel**
+The app is failing in production because the Google Sheets API configuration isn't properly set up for Vercel's serverless environment.
 
-1. **Go to [Vercel](https://vercel.com)** and sign in with your GitHub account
-2. **Click "New Project"**
-3. **Import your repository**: `taimoorzulfiqar/smol-tennis-app`
-4. **Select the repository** and click "Deploy"
+## Solution Steps:
 
-### **Step 2: Configure Environment Variables**
+### 1. Set Up Environment Variables in Vercel
 
-In your Vercel project settings, add this environment variable:
+You need to add your Google Service Account credentials to Vercel's environment variables:
 
-#### **Service Account Key (Required)**
+1. **Go to your Vercel dashboard**
+2. **Select your tennis-app project**
+3. **Go to Settings → Environment Variables**
+4. **Add the following environment variable:**
+
 ```
-GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"sending-emails-468010",...}
+Name: GOOGLE_SERVICE_ACCOUNT_KEY
+Value: [Your entire service account JSON as a single line]
 ```
 
-**How to set this:**
-1. Copy the entire content of your `server/service-account-key.json` file
-2. In Vercel Dashboard → Settings → Environment Variables
-3. Add variable: `GOOGLE_SERVICE_ACCOUNT_KEY`
-4. Value: Paste the entire JSON content
-5. Select "Production" and "Preview" environments
-6. Click "Save"
+**To get the service account JSON:**
+- Copy the contents of `server/service-account-key.json`
+- Remove all line breaks and spaces to make it a single line
+- Paste it as the value
 
-### **Step 3: Deploy**
+### 2. Alternative: Use API Key Method
 
-1. **Push your changes** to GitHub
-2. **Vercel will automatically deploy** your app using the updated configuration
-3. **Your app will be available** at: `https://your-app-name.vercel.app`
+If you prefer to use API Key instead of Service Account:
 
-## 🔧 **Post-Deployment Setup**
+1. **Update `src/config.js`:**
+```javascript
+const config = {
+  apiKey: 'YOUR_ACTUAL_API_KEY_HERE',
+  spreadsheetId: '1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU',
+  range: 'Men!A:Z',
+  useServiceAccount: false, // Change this to false
+  apiBaseUrl: process.env.NODE_ENV === 'production' 
+    ? '' 
+    : ''
+};
+```
 
-### **1. Configure Your App**
-1. **Visit your deployed app**
-2. **Go to**: `/setup`
-3. **Toggle**: "Use Service Account (Recommended)"
-4. **Enter**: Your Spreadsheet ID
-5. **Click**: "Test Connection"
+2. **Get your API Key from Google Cloud Console:**
+   - Go to Google Cloud Console
+   - Enable Google Sheets API
+   - Create credentials → API Key
+   - Replace 'YOUR_ACTUAL_API_KEY_HERE' with your key
 
-### **2. Share Your Google Sheet**
-1. **Open your Google Sheet**
-2. **Click "Share"**
-3. **Add**: `tennis-app@sending-emails-468010.iam.gserviceaccount.com`
-4. **Set permission**: "Editor" (or "Viewer")
-5. **Click "Send"**
+### 3. Deploy to Vercel
 
-## 🎯 **What's Fixed**
+After setting up environment variables:
 
-- ✅ **Proper API routing** - API calls now go to `/api/sheets`
-- ✅ **Environment variables** - Consistent service account configuration
-- ✅ **Build configuration** - Both frontend and API routes properly configured
-- ✅ **CORS handling** - API routes handle cross-origin requests
+```bash
+# Deploy to Vercel
+vercel --prod
+```
 
-## 🔒 **Security Notes**
+### 4. Verify the Fix
 
-- **Never commit** service account keys to Git
-- **Use environment variables** in Vercel
-- **Keep your Google Sheet** permissions minimal
-- **Monitor your API usage** in Google Cloud Console
+1. **Check the API endpoint:** Visit `https://your-app.vercel.app/api/sheets?spreadsheetId=1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU&range=Men!A:Z&useServiceAccount=true`
 
-## 🚨 **Troubleshooting**
+2. **Should return JSON data** instead of an error
 
-### **"Service account configuration error"**
-- Check environment variable is set correctly in Vercel
-- Verify the JSON is valid and complete
-- Ensure the variable is available in Production environment
+### 5. Troubleshooting
 
-### **"Access denied" error**
-- Make sure you shared the Google Sheet with the service account email
-- Check that the service account has the correct permissions
-- Verify Google Sheets API is enabled in your project
+**If still getting errors:**
 
-### **Build errors**
-- Check that all dependencies are in `package.json`
-- Ensure the build script is correct
-- Verify the Vercel configuration is valid
+1. **Check Vercel Function Logs:**
+   - Go to Vercel Dashboard → Functions
+   - Check the logs for `/api/sheets`
 
-### **API not found errors**
-- Ensure your API calls go to `/api/sheets` (not `/api/sheets`)
-- Check that the API route is properly deployed in Vercel
-- Verify the route configuration in `vercel.json`
+2. **Verify Environment Variables:**
+   - Make sure `GOOGLE_SERVICE_ACCOUNT_KEY` is set correctly
+   - The JSON should be valid and complete
 
-## 📞 **Need Help?**
+3. **Check Google Sheets Permissions:**
+   - Ensure your service account email has access to the spreadsheet
+   - The service account email is: `tennis-app@sending-emails-468010.iam.gserviceaccount.com`
 
-1. **Check Vercel logs** in the dashboard
-2. **Verify environment variables** are set correctly
-3. **Test locally** first with `npm run dev`
-4. **Check Google Cloud Console** for API usage and errors
-5. **Review deployment logs** in Vercel dashboard for specific error messages
+## Current Status
+
+✅ **API Endpoint:** `/api/sheets.js` is properly configured for Vercel  
+✅ **Dependencies:** `googleapis` package is included  
+✅ **CORS:** Properly configured for production  
+❌ **Environment Variables:** Need to be set in Vercel dashboard  
+
+## Next Steps
+
+1. Set up environment variables in Vercel
+2. Deploy the updated code
+3. Test the API endpoint
+4. Verify the app works in production
+
+The main issue is that Vercel needs the Google Service Account credentials as environment variables, which aren't currently set up in your production environment.
