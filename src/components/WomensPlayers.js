@@ -128,7 +128,7 @@ const WomensPlayers = () => {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress size={60} />
+        <CircularProgress size={60} sx={{ color: 'primary.main' }} />
       </Box>
     );
   }
@@ -158,11 +158,11 @@ const WomensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -194,11 +194,11 @@ const WomensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -230,11 +230,11 @@ const WomensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -265,10 +265,10 @@ const WomensPlayers = () => {
       </Grid>
 
       {/* Player Table */}
-      <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', color: '#e91e63' }}>
-            🎾 Player Profiles
+      <Paper sx={{ p: 4, borderRadius: 3, border: '1px solid', borderColor: 'grey.300' }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+          <Typography variant="h4" component="h2" sx={{ fontWeight: 600, color: 'text.primary' }}>
+            Player Profiles
           </Typography>
           <Box display="flex" alignItems="center" gap={2}>
             <TextField
@@ -276,28 +276,40 @@ const WomensPlayers = () => {
               placeholder="Search players..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ 
-                width: 300,
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
-              }}
+                             InputProps={{
+                 startAdornment: (
+                   <InputAdornment position="start">
+                     <Search sx={{ color: 'text.secondary' }} />
+                   </InputAdornment>
+                 ),
+               }}
+               sx={{ 
+                 width: 300,
+                 '& .MuiOutlinedInput-root': {
+                   borderRadius: 2,
+                   '& fieldset': {
+                     borderColor: 'grey.400',
+                   },
+                   '&:hover fieldset': {
+                     borderColor: 'grey.500',
+                   },
+                   '&.Mui-focused fieldset': {
+                     borderColor: 'primary.main',
+                   },
+                 }
+               }}
             />
-            <IconButton 
-              onClick={handleRefresh}
-              sx={{ 
-                backgroundColor: 'secondary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'secondary.dark' }
-              }}
-            >
+                         <IconButton 
+               onClick={handleRefresh}
+               sx={{ 
+                 backgroundColor: 'grey.200',
+                 color: 'text.primary',
+                 '&:hover': { 
+                   backgroundColor: 'grey.300',
+                   color: 'primary.main'
+                 }
+               }}
+             >
               <Refresh />
             </IconButton>
           </Box>
@@ -306,56 +318,60 @@ const WomensPlayers = () => {
         <TableContainer sx={{ borderRadius: 2, overflow: 'hidden' }}>
           <Table>
             <TableHead>
-              <TableRow sx={{ 
-                background: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)',
-                color: 'white'
-              }}>
+                             <TableRow sx={{ 
+                 backgroundColor: 'grey.100',
+                 borderBottom: '2px solid',
+                 borderColor: 'grey.300'
+               }}>
                 {headers.map((header, index) => (
-                  <TableCell 
-                    key={index} 
-                    sx={{ 
-                      fontWeight: 'bold',
-                      color: 'white',
-                      fontSize: '1.1rem'
-                    }}
-                  >
-                    {header}
-                  </TableCell>
-                ))}
-                <TableCell sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>
-                  Win Rate
-                </TableCell>
+                                     <TableCell 
+                     key={index} 
+                     sx={{ 
+                       fontWeight: 600,
+                       color: 'text.primary',
+                       fontSize: '0.875rem',
+                       textTransform: 'uppercase',
+                       letterSpacing: '0.05em'
+                     }}
+                   >
+                     {header}
+                   </TableCell>
+                 ))}
+                 <TableCell sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                   Win Rate
+                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, rowIndex) => (
-                  <TableRow 
-                    key={rowIndex}
-                    sx={{ 
-                      '&:hover': { 
-                        backgroundColor: '#fce4ec',
-                        transform: 'scale(1.01)',
-                        transition: 'all 0.2s ease-in-out'
-                      },
-                      transition: 'all 0.2s ease-in-out'
-                    }}
-                  >
+                                     <TableRow 
+                     key={rowIndex}
+                     sx={{ 
+                       '&:hover': { 
+                         backgroundColor: 'grey.200',
+                         transition: 'background-color 0.2s ease'
+                       },
+                       transition: 'background-color 0.2s ease',
+                       borderBottom: '1px solid',
+                       borderColor: 'grey.200'
+                     }}
+                   >
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={2}>
-                        <Avatar sx={{ 
-                          bgcolor: '#e91e63',
-                          width: 45,
-                          height: 45,
-                          fontSize: '1.2rem',
-                          fontWeight: 'bold'
-                        }}>
+                                                 <Avatar sx={{ 
+                           bgcolor: 'primary.main',
+                           width: 40,
+                           height: 40,
+                           fontSize: '0.875rem',
+                           fontWeight: 600
+                         }}>
                           {row[0]?.split(' ').map(n => n[0]).join('')}
                         </Avatar>
-                        <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>
-                          {row[0]}
-                        </Typography>
+                                                 <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                           {row[0]}
+                         </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>{row[1]}</TableCell>
@@ -367,15 +383,17 @@ const WomensPlayers = () => {
                     </TableCell>
                     <TableCell>{row[4]}</TableCell>
                     <TableCell>
-                      <Chip 
-                        label={row[5]} 
-                        size="small" 
-                        sx={{ 
-                          backgroundColor: getCategoryColor(row[5]),
-                          color: 'white',
-                          fontWeight: 'bold'
-                        }}
-                      />
+                                             <Chip 
+                         label={row[5]} 
+                         size="small" 
+                         sx={{ 
+                           backgroundColor: 'grey.200',
+                           color: 'text.primary',
+                           fontWeight: 500,
+                           fontSize: '0.75rem',
+                           height: 24
+                         }}
+                       />
                     </TableCell>
                     <TableCell>
                       <Typography 
@@ -405,12 +423,12 @@ const WomensPlayers = () => {
         />
       </Paper>
 
-      {/* Footer */}
-      <Paper sx={{ p: 3, mt: 4, textAlign: 'center' }}>
-        <Typography variant="body2" color="text.secondary">
-          Data sourced from Google Sheets • Women's Tennis League Statistics
-        </Typography>
-      </Paper>
+             {/* Footer */}
+       <Box sx={{ mt: 4, textAlign: 'center' }}>
+         <Typography variant="body2" color="text.secondary">
+           Data sourced from Google Sheets • Women's Tennis League Statistics
+         </Typography>
+       </Box>
     </Box>
   );
 };

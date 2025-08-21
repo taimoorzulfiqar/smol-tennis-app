@@ -128,7 +128,7 @@ const MensPlayers = () => {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress size={60} />
+        <CircularProgress size={60} sx={{ color: 'primary.main' }} />
       </Box>
     );
   }
@@ -158,11 +158,11 @@ const MensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -194,11 +194,11 @@ const MensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -230,11 +230,11 @@ const MensPlayers = () => {
           <Card sx={{ 
             background: 'background.paper',
             border: '1px solid',
-            borderColor: 'grey.200',
+            borderColor: 'grey.300',
             transition: 'all 0.2s ease',
             '&:hover': {
               transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
             }
           }}>
             <CardContent sx={{ textAlign: 'center', p: 3 }}>
@@ -265,7 +265,7 @@ const MensPlayers = () => {
       </Grid>
 
       {/* Player Table */}
-      <Paper sx={{ p: 4, borderRadius: 3, border: '1px solid', borderColor: 'grey.200' }}>
+      <Paper sx={{ p: 4, borderRadius: 3, border: '1px solid', borderColor: 'grey.300' }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
           <Typography variant="h4" component="h2" sx={{ fontWeight: 600, color: 'text.primary' }}>
             Player Profiles
@@ -287,29 +287,29 @@ const MensPlayers = () => {
                 width: 300,
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  '& fieldset': {
-                    borderColor: 'grey.300',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'grey.400',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'primary.main',
-                  },
+                                   '& fieldset': {
+                   borderColor: 'grey.400',
+                 },
+                 '&:hover fieldset': {
+                   borderColor: 'grey.500',
+                 },
+                 '&.Mui-focused fieldset': {
+                   borderColor: 'primary.main',
+                 },
                 }
               }}
             />
-            <IconButton 
-              onClick={handleRefresh}
-              sx={{ 
-                backgroundColor: 'grey.100',
-                color: 'text.primary',
-                '&:hover': { 
-                  backgroundColor: 'grey.200',
-                  color: 'primary.main'
-                }
-              }}
-            >
+                         <IconButton 
+               onClick={handleRefresh}
+               sx={{ 
+                 backgroundColor: 'grey.200',
+                 color: 'text.primary',
+                 '&:hover': { 
+                   backgroundColor: 'grey.300',
+                   color: 'primary.main'
+                 }
+               }}
+             >
               <Refresh />
             </IconButton>
           </Box>
@@ -318,11 +318,11 @@ const MensPlayers = () => {
         <TableContainer sx={{ borderRadius: 2, overflow: 'hidden' }}>
           <Table>
             <TableHead>
-              <TableRow sx={{ 
-                backgroundColor: 'grey.50',
-                borderBottom: '2px solid',
-                borderColor: 'grey.200'
-              }}>
+                             <TableRow sx={{ 
+                 backgroundColor: 'grey.100',
+                 borderBottom: '2px solid',
+                 borderColor: 'grey.300'
+               }}>
                 {headers.map((header, index) => (
                   <TableCell 
                     key={index} 
@@ -348,15 +348,15 @@ const MensPlayers = () => {
                 .map((row, rowIndex) => (
                   <TableRow 
                     key={rowIndex}
-                    sx={{ 
-                      '&:hover': { 
-                        backgroundColor: 'grey.50',
-                        transition: 'background-color 0.2s ease'
-                      },
-                      transition: 'background-color 0.2s ease',
-                      borderBottom: '1px solid',
-                      borderColor: 'grey.100'
-                    }}
+                                         sx={{ 
+                       '&:hover': { 
+                         backgroundColor: 'grey.200',
+                         transition: 'background-color 0.2s ease'
+                       },
+                       transition: 'background-color 0.2s ease',
+                       borderBottom: '1px solid',
+                       borderColor: 'grey.200'
+                     }}
                   >
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={2}>
@@ -383,17 +383,17 @@ const MensPlayers = () => {
                     </TableCell>
                     <TableCell>{row[4]}</TableCell>
                     <TableCell>
-                      <Chip 
-                        label={row[5]} 
-                        size="small" 
-                        sx={{ 
-                          backgroundColor: 'grey.100',
-                          color: 'text.primary',
-                          fontWeight: 500,
-                          fontSize: '0.75rem',
-                          height: 24
-                        }}
-                      />
+                                             <Chip 
+                         label={row[5]} 
+                         size="small" 
+                         sx={{ 
+                           backgroundColor: 'grey.200',
+                           color: 'text.primary',
+                           fontWeight: 500,
+                           fontSize: '0.75rem',
+                           height: 24
+                         }}
+                       />
                     </TableCell>
                     <TableCell>
                       <Typography 

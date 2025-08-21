@@ -38,35 +38,36 @@ import WomensLeaderboard from './components/WomensLeaderboard';
 // Create theme
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: '#1a1a1a',
-      light: '#404040',
-      dark: '#000000',
+      main: '#32CD32', // Lime green from the image
+      light: '#7CFC00',
+      dark: '#228B22',
     },
     secondary: {
-      main: '#6366f1',
-      light: '#818cf8',
-      dark: '#4f46e5',
+      main: '#8A2BE2', // Purple from the image
+      light: '#9370DB',
+      dark: '#4B0082',
     },
     background: {
-      default: '#fafafa',
-      paper: '#ffffff',
+      default: '#0F0F0F', // Very dark background
+      paper: '#1A1A1A', // Slightly lighter dark
     },
     text: {
-      primary: '#1a1a1a',
-      secondary: '#6b7280',
+      primary: '#FFFFFF',
+      secondary: '#B0B0B0',
     },
     grey: {
-      50: '#f9fafb',
-      100: '#f3f4f6',
-      200: '#e5e7eb',
-      300: '#d1d5db',
-      400: '#9ca3af',
-      500: '#6b7280',
-      600: '#4b5563',
-      700: '#374151',
-      800: '#1f2937',
-      900: '#111827',
+      50: '#1A1A1A',
+      100: '#2A2A2A',
+      200: '#3A3A3A',
+      300: '#4A4A4A',
+      400: '#5A5A5A',
+      500: '#6A6A6A',
+      600: '#7A7A7A',
+      700: '#8A8A8A',
+      800: '#9A9A9A',
+      900: '#AAAAAA',
     },
   },
   typography: {
@@ -115,31 +116,31 @@ const theme = createTheme({
   },
   shadows: [
     'none',
-    '0px 1px 2px rgba(0, 0, 0, 0.05)',
-    '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
-    '0px 4px 6px rgba(0, 0, 0, 0.05), 0px 2px 4px rgba(0, 0, 0, 0.06)',
-    '0px 10px 15px rgba(0, 0, 0, 0.05), 0px 4px 6px rgba(0, 0, 0, 0.06)',
-    '0px 20px 25px rgba(0, 0, 0, 0.05), 0px 10px 10px rgba(0, 0, 0, 0.06)',
-    '0px 25px 50px rgba(0, 0, 0, 0.05), 0px 12px 24px rgba(0, 0, 0, 0.06)',
-    '0px 30px 60px rgba(0, 0, 0, 0.05), 0px 15px 30px rgba(0, 0, 0, 0.06)',
-    '0px 35px 70px rgba(0, 0, 0, 0.05), 0px 18px 36px rgba(0, 0, 0, 0.06)',
-    '0px 40px 80px rgba(0, 0, 0, 0.05), 0px 20px 40px rgba(0, 0, 0, 0.06)',
-    '0px 45px 90px rgba(0, 0, 0, 0.05), 0px 22px 44px rgba(0, 0, 0, 0.06)',
-    '0px 50px 100px rgba(0, 0, 0, 0.05), 0px 25px 50px rgba(0, 0, 0, 0.06)',
-    '0px 55px 110px rgba(0, 0, 0, 0.05), 0px 27px 55px rgba(0, 0, 0, 0.06)',
-    '0px 60px 120px rgba(0, 0, 0, 0.05), 0px 30px 60px rgba(0, 0, 0, 0.06)',
-    '0px 65px 130px rgba(0, 0, 0, 0.05), 0px 32px 65px rgba(0, 0, 0, 0.06)',
-    '0px 70px 140px rgba(0, 0, 0, 0.05), 0px 35px 70px rgba(0, 0, 0, 0.06)',
-    '0px 75px 150px rgba(0, 0, 0, 0.05), 0px 37px 75px rgba(0, 0, 0, 0.06)',
-    '0px 80px 160px rgba(0, 0, 0, 0.05), 0px 40px 80px rgba(0, 0, 0, 0.06)',
-    '0px 85px 170px rgba(0, 0, 0, 0.05), 0px 42px 85px rgba(0, 0, 0, 0.06)',
-    '0px 90px 180px rgba(0, 0, 0, 0.05), 0px 45px 90px rgba(0, 0, 0, 0.06)',
-    '0px 95px 190px rgba(0, 0, 0, 0.05), 0px 47px 95px rgba(0, 0, 0, 0.06)',
-    '0px 100px 200px rgba(0, 0, 0, 0.05), 0px 50px 100px rgba(0, 0, 0, 0.06)',
-    '0px 105px 210px rgba(0, 0, 0, 0.05), 0px 52px 105px rgba(0, 0, 0, 0.06)',
-    '0px 110px 220px rgba(0, 0, 0, 0.05), 0px 55px 110px rgba(0, 0, 0, 0.06)',
-    '0px 115px 230px rgba(0, 0, 0, 0.05), 0px 57px 115px rgba(0, 0, 0, 0.06)',
-    '0px 120px 240px rgba(0, 0, 0, 0.05), 0px 60px 120px rgba(0, 0, 0, 0.06)',
+    '0px 1px 2px rgba(0, 0, 0, 0.3)',
+    '0px 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.3)',
+    '0px 4px 6px rgba(0, 0, 0, 0.4), 0px 2px 4px rgba(0, 0, 0, 0.3)',
+    '0px 10px 15px rgba(0, 0, 0, 0.4), 0px 4px 6px rgba(0, 0, 0, 0.3)',
+    '0px 20px 25px rgba(0, 0, 0, 0.4), 0px 10px 10px rgba(0, 0, 0, 0.3)',
+    '0px 25px 50px rgba(0, 0, 0, 0.4), 0px 12px 24px rgba(0, 0, 0, 0.3)',
+    '0px 30px 60px rgba(0, 0, 0, 0.4), 0px 15px 30px rgba(0, 0, 0, 0.3)',
+    '0px 35px 70px rgba(0, 0, 0, 0.4), 0px 18px 36px rgba(0, 0, 0, 0.3)',
+    '0px 40px 80px rgba(0, 0, 0, 0.4), 0px 20px 40px rgba(0, 0, 0, 0.3)',
+    '0px 45px 90px rgba(0, 0, 0, 0.4), 0px 22px 44px rgba(0, 0, 0, 0.3)',
+    '0px 50px 100px rgba(0, 0, 0, 0.4), 0px 25px 50px rgba(0, 0, 0, 0.3)',
+    '0px 55px 110px rgba(0, 0, 0, 0.4), 0px 27px 55px rgba(0, 0, 0, 0.3)',
+    '0px 60px 120px rgba(0, 0, 0, 0.4), 0px 30px 60px rgba(0, 0, 0, 0.3)',
+    '0px 65px 130px rgba(0, 0, 0, 0.4), 0px 32px 65px rgba(0, 0, 0, 0.3)',
+    '0px 70px 140px rgba(0, 0, 0, 0.4), 0px 35px 70px rgba(0, 0, 0, 0.3)',
+    '0px 75px 150px rgba(0, 0, 0, 0.4), 0px 37px 75px rgba(0, 0, 0, 0.3)',
+    '0px 80px 160px rgba(0, 0, 0, 0.4), 0px 40px 80px rgba(0, 0, 0, 0.3)',
+    '0px 85px 170px rgba(0, 0, 0, 0.4), 0px 42px 85px rgba(0, 0, 0, 0.3)',
+    '0px 90px 180px rgba(0, 0, 0, 0.4), 0px 45px 90px rgba(0, 0, 0, 0.3)',
+    '0px 95px 190px rgba(0, 0, 0, 0.4), 0px 47px 95px rgba(0, 0, 0, 0.3)',
+    '0px 100px 200px rgba(0, 0, 0, 0.4), 0px 50px 100px rgba(0, 0, 0, 0.3)',
+    '0px 105px 210px rgba(0, 0, 0, 0.4), 0px 52px 105px rgba(0, 0, 0, 0.3)',
+    '0px 110px 220px rgba(0, 0, 0, 0.4), 0px 55px 110px rgba(0, 0, 0, 0.3)',
+    '0px 115px 230px rgba(0, 0, 0, 0.4), 0px 57px 115px rgba(0, 0, 0, 0.3)',
+    '0px 120px 240px rgba(0, 0, 0, 0.4), 0px 60px 120px rgba(0, 0, 0, 0.3)',
   ],
   components: {
     MuiButton: {
@@ -156,8 +157,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
-          border: '1px solid #f3f4f6',
+          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.3)',
+          border: '1px solid #2A2A2A',
         },
       },
     },
@@ -165,7 +166,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.3)',
         },
       },
     },
@@ -264,12 +265,12 @@ function App() {
         >
           <SportsTennis sx={{ fontSize: 24, color: 'white' }} />
         </Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
-          Tennis League
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Management System
-        </Typography>
+                 <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
+           Expert Tennis Academy
+         </Typography>
+         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+           Management System
+         </Typography>
       </Box>
       <Divider />
       <List sx={{ pt: 2 }}>
