@@ -19,6 +19,7 @@ import {
   Avatar,
   CircularProgress,
   Alert,
+  IconButton,
 } from '@mui/material';
 import {
   Search,

@@ -18,7 +18,7 @@
 
 const config = {
   // Your Google Sheets API Key (only needed if useServiceAccount is false)
-  apiKey: 'YOUR_API_KEY_HERE',
+  apiKey: 'AIzaSyDIyMoMHbTaalqtKhys7LucrMnz5yVbQgM',
   
   // Your Google Sheet ID (found in the URL)
   spreadsheetId: '1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU',
