@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import config from '../../config.js';
+import config from '../config.js';
 
 const GoogleSheetsContext = createContext();
 
