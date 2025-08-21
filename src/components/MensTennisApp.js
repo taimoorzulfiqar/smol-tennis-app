@@ -38,9 +38,6 @@ const MensTennisApp = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  
-  // Add error boundary for the component
-  try {
 
   useEffect(() => {
     // Auto-fetch data when component mounts
@@ -48,17 +45,6 @@ const MensTennisApp = () => {
       fetchSheetData();
     }
   }, [fetchSheetData, sheetsData.values]);
-
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    if (playerData) {
-      const interval = setInterval(() => {
-        fetchSheetData();
-      }, 30000); // 30 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [fetchSheetData, playerData]);
 
   const getPlayerData = () => {
     // If we have real data from Google Sheets, use it
@@ -81,6 +67,17 @@ const MensTennisApp = () => {
   };
 
   const playerData = getPlayerData();
+  
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    if (playerData) {
+      const interval = setInterval(() => {
+        fetchSheetData();
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [fetchSheetData, playerData]);
   
   // Add debugging information
   console.log('App Debug Info:', {
@@ -444,22 +441,9 @@ const MensTennisApp = () => {
         <Typography variant="body2" color="text.secondary">
           Data sourced from Google Sheets • Men's Tennis League Statistics
         </Typography>
-             </Paper>
-     </Box>
-   );
-   } catch (err) {
-     console.error('Error in MensTennisApp:', err);
-     return (
-       <Box sx={{ p: 4, textAlign: 'center' }}>
-         <Typography variant="h4" color="error" gutterBottom>
-           Something went wrong
-         </Typography>
-         <Typography variant="body1" color="text.secondary">
-           {err.message}
-         </Typography>
-       </Box>
-     );
-   }
- };
+      </Paper>
+    </Box>
+  );
+};
 
 export default MensTennisApp;
