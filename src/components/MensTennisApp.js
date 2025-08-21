@@ -29,15 +29,12 @@ import {
   EmojiEvents,
   Person,
   Category,
-  Settings,
   Refresh,
 } from '@mui/icons-material';
 import { useGoogleSheets } from '../context/GoogleSheetsContext';
-import { useNavigate } from 'react-router-dom';
 
 const MensTennisApp = () => {
   const { sheetsData, isLoading, error, fetchSheetData } = useGoogleSheets();
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -69,7 +66,7 @@ const MensTennisApp = () => {
 
   const playerData = getPlayerData();
   
-  // Show setup page if no data is available
+  // Show error or loading state if no data is available
   if (!playerData) {
     return (
       <Box>
@@ -93,19 +90,14 @@ const MensTennisApp = () => {
 
         <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h5" gutterBottom>
-            No Data Available
+            Configuration Required
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
-            Please connect your Google Sheets to view the Men's Tennis League data.
+            Please update the API key in config.js file to connect to your Google Sheets.
           </Typography>
-          <Button 
-            variant="contained" 
-            size="large"
-            onClick={() => navigate('/setup')}
-            startIcon={<Settings />}
-          >
-            Setup Google Sheets
-          </Button>
+          <Typography variant="body2" color="text.secondary">
+            Current Spreadsheet ID: {sheetsData.spreadsheetId || 'Not configured'}
+          </Typography>
         </Paper>
       </Box>
     );

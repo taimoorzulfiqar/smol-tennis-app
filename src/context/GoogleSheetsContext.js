@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../config.js';
 
 const GoogleSheetsContext = createContext();
 
@@ -16,10 +17,10 @@ export const GoogleSheetsProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [config, setConfig] = useState({
-    spreadsheetId: '', // Replace with your actual Spreadsheet ID
-    apiKey: '', // Replace with your actual API Key
-    range: 'Men!A:F', // Men sheet with columns A-F
-    useServiceAccount: false, // Set to true to use service account
+    spreadsheetId: config.spreadsheetId,
+    apiKey: config.apiKey,
+    range: config.range,
+    useServiceAccount: config.useServiceAccount, // Use setting from config.js
   });
 
   const fetchSheetData = async (spreadsheetId, range = 'A:Z') => {
@@ -55,13 +56,9 @@ export const GoogleSheetsProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const savedConfig = localStorage.getItem('sheetsConfig');
-    if (savedConfig) {
-      const parsedConfig = JSON.parse(savedConfig);
-      setConfig(parsedConfig);
-      if (parsedConfig.spreadsheetId) {
-        fetchSheetData(parsedConfig.spreadsheetId, parsedConfig.range);
-      }
+    // Use config from config.js file directly
+    if (config.spreadsheetId) {
+      fetchSheetData(config.spreadsheetId, config.range);
     }
   }, []);
 

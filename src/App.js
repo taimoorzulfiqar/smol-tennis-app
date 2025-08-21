@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { SportsTennis } from '@mui/icons-material';
 import MensTennisApp from './components/MensTennisApp';
-import SheetsSetup from './components/SheetsSetup';
 import { GoogleSheetsProvider } from './context/GoogleSheetsContext';
 
 const theme = createTheme({
@@ -62,7 +61,6 @@ function App() {
               
               <Routes>
                 <Route path="/" element={<MensTennisApp />} />
-                <Route path="/setup" element={<SheetsSetup />} />
               </Routes>
             </Container>
           </Box>
