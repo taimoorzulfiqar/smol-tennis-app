@@ -5,7 +5,8 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "build",
+        "installCommand": "npm ci --only=production"
       }
     },
     {
@@ -22,5 +23,10 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "server/server.js": {
+      "maxDuration": 10
+    }
+  }
 }
