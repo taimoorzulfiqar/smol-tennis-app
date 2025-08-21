@@ -38,6 +38,9 @@ const MensTennisApp = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  
+  // Add error boundary for the component
+  try {
 
   useEffect(() => {
     // Auto-fetch data when component mounts
@@ -58,13 +61,34 @@ const MensTennisApp = () => {
   }, [fetchSheetData, playerData]);
 
   const getPlayerData = () => {
-    if (!sheetsData.values || sheetsData.values.length < 2) {
-      return null; // Return null to indicate no data
+    // If we have real data from Google Sheets, use it
+    if (sheetsData.values && sheetsData.values.length >= 2) {
+      return sheetsData.values;
     }
-    return sheetsData.values;
+    
+    // Fallback sample data for demonstration
+    return [
+      ['Name', 'Matches Played', 'Matches Won', 'Matches Lost', 'Games Won', 'Category'],
+      ['Taimoor Zulfiqar', '2', '2', '0', '12', 'Intermediate'],
+      ['Farhan', '1', '0', '1', '4', 'Beginner'],
+      ['Umer', '1', '0', '1', '5', 'Intermediate'],
+      ['Murtaza', '0', '0', '0', '0', 'Beginner'],
+      ['Ahmed', '3', '2', '1', '15', 'Advanced'],
+      ['Bilal', '2', '1', '1', '8', 'Intermediate'],
+      ['Hassan', '1', '1', '0', '6', 'Beginner'],
+      ['Usman', '2', '0', '2', '3', 'Beginner']
+    ];
   };
 
   const playerData = getPlayerData();
+  
+  // Add debugging information
+  console.log('App Debug Info:', {
+    sheetsData,
+    isLoading,
+    error,
+    playerData: playerData ? playerData.length : 'null'
+  });
   
   // Show error or loading state if no data is available
   if (!playerData) {
@@ -420,9 +444,22 @@ const MensTennisApp = () => {
         <Typography variant="body2" color="text.secondary">
           Data sourced from Google Sheets • Men's Tennis League Statistics
         </Typography>
-      </Paper>
-    </Box>
-  );
-};
+             </Paper>
+     </Box>
+   );
+   } catch (err) {
+     console.error('Error in MensTennisApp:', err);
+     return (
+       <Box sx={{ p: 4, textAlign: 'center' }}>
+         <Typography variant="h4" color="error" gutterBottom>
+           Something went wrong
+         </Typography>
+         <Typography variant="body1" color="text.secondary">
+           {err.message}
+         </Typography>
+       </Box>
+     );
+   }
+ };
 
 export default MensTennisApp;

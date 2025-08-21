@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import config from '../config.js';
+import configFile from '../config.js';
 
 const GoogleSheetsContext = createContext();
 
@@ -17,10 +17,10 @@ export const GoogleSheetsProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [config, setConfig] = useState({
-    spreadsheetId: config.spreadsheetId,
-    apiKey: config.apiKey,
-    range: config.range,
-    useServiceAccount: config.useServiceAccount, // Use setting from config.js
+    spreadsheetId: configFile.spreadsheetId,
+    apiKey: configFile.apiKey,
+    range: configFile.range,
+    useServiceAccount: configFile.useServiceAccount, // Use setting from config.js
   });
 
   const fetchSheetData = async (spreadsheetId, range = 'A:Z') => {
@@ -57,8 +57,11 @@ export const GoogleSheetsProvider = ({ children }) => {
 
   useEffect(() => {
     // Use config from config.js file directly
+    console.log('GoogleSheetsContext initialized with config:', config);
     if (config.spreadsheetId) {
       fetchSheetData(config.spreadsheetId, config.range);
+    } else {
+      console.log('No spreadsheet ID configured, using fallback data');
     }
   }, []);
 
