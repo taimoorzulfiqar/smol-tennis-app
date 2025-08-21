@@ -22,6 +22,7 @@ export const GoogleSheetsProvider = ({ children }) => {
     apiKey: configFile.apiKey,
     range: configFile.range,
     useServiceAccount: configFile.useServiceAccount,
+    apiBaseUrl: configFile.apiBaseUrl,
   });
 
   const fetchSheetData = useCallback(async (spreadsheetId, range = 'A:Z') => {
@@ -50,7 +51,8 @@ export const GoogleSheetsProvider = ({ children }) => {
         params.append('apiKey', config.apiKey);
       }
       
-      const response = await axios.get(`/api/sheets?${params.toString()}`);
+      const apiUrl = config.apiBaseUrl ? `${config.apiBaseUrl}/api/sheets` : '/api/sheets';
+      const response = await axios.get(`${apiUrl}?${params.toString()}`);
       
       // Cache the response
       setDataCache(prev => new Map(prev.set(cacheKey, {
