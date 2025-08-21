@@ -38,7 +38,6 @@ import WomensMatches from './components/WomensMatches';
 import MensLeaderboard from './components/MensLeaderboard';
 import WomensLeaderboard from './components/WomensLeaderboard';
 import LoadingSpinner from './components/LoadingSpinner';
-import TestComponent from './components/TestComponent';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -228,12 +227,6 @@ const drawerWidth = 280;
 
 const menuItems = [
   {
-    text: "Test Page",
-    icon: <Person />,
-    component: TestComponent,
-    path: 'test'
-  },
-  {
     text: "Men's Players",
     icon: <Person />,
     component: MensPlayers,
@@ -275,7 +268,7 @@ const menuItems = [
 const PageLoader = () => <LoadingSpinner message="Loading page..." />;
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('test');
+  const [currentPage, setCurrentPage] = useState('mens-players');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
