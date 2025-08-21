@@ -28,8 +28,15 @@ app.get('/api/sheets', async (req, res) => {
     if (useServiceAccount === 'true') {
       // Use Service Account authentication
       try {
-        const serviceAccountPath = path.join(__dirname, 'service-account-key.json');
-        const serviceAccount = require(serviceAccountPath);
+        let serviceAccount;
+        
+        // Check if running on Vercel (environment variable) or local (file)
+        if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+          serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+        } else {
+          const serviceAccountPath = path.join(__dirname, 'service-account-key.json');
+          serviceAccount = require(serviceAccountPath);
+        }
         
         auth = new google.auth.GoogleAuth({
           credentials: serviceAccount,
@@ -43,7 +50,7 @@ app.get('/api/sheets', async (req, res) => {
       } catch (serviceAccountError) {
         console.error('Service account error:', serviceAccountError);
         return res.status(500).json({ 
-          error: 'Service account configuration error. Please check your service account key file.' 
+          error: 'Service account configuration error. Please check your service account configuration.' 
         });
       }
     } else {
