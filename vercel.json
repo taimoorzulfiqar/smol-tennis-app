@@ -7,13 +7,17 @@
       "config": {
         "distDir": "build"
       }
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/test",
+      "dest": "/api/test.js"
+    },
+    {
+      "src": "/api/sheets",
+      "dest": "/api/sheets.js"
+    },
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
@@ -22,8 +26,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "GOOGLE_SERVICE_ACCOUNT_KEY": "@google-service-account-key"
-  }
+  ]
 }
