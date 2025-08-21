@@ -2,6 +2,8 @@
 
 A focused tennis application that displays Men's Tennis League player profiles and statistics from Google Sheets. The app shows player information including matches played, wins, losses, games won, and categories.
 
+<!-- Production deployment ready with Vercel serverless functions -->
+
 ## Features
 
 - 👥 **Player Profiles**: Display Men's Tennis League player information
