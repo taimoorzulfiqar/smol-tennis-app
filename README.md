@@ -87,7 +87,7 @@ cd ..
 3. Make sure it's publicly accessible or shared with appropriate permissions
 4. Copy the Spreadsheet ID from the URL:
    ```
-   https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
+   https://docs.google.com/spreadsheets/d/1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU/edit?gid=0#gid=0
    ```
 
 ### 4. Start the Application
