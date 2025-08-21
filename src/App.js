@@ -39,14 +39,136 @@ import WomensLeaderboard from './components/WomensLeaderboard';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2e7d32',
+      main: '#1a1a1a',
+      light: '#404040',
+      dark: '#000000',
     },
     secondary: {
-      main: '#ff6f00',
+      main: '#6366f1',
+      light: '#818cf8',
+      dark: '#4f46e5',
+    },
+    background: {
+      default: '#fafafa',
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#1a1a1a',
+      secondary: '#6b7280',
+    },
+    grey: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+      fontSize: '2.5rem',
+      lineHeight: 1.2,
+    },
+    h2: {
+      fontWeight: 600,
+      fontSize: '2rem',
+      lineHeight: 1.3,
+    },
+    h3: {
+      fontWeight: 600,
+      fontSize: '1.75rem',
+      lineHeight: 1.4,
+    },
+    h4: {
+      fontWeight: 600,
+      fontSize: '1.5rem',
+      lineHeight: 1.4,
+    },
+    h5: {
+      fontWeight: 600,
+      fontSize: '1.25rem',
+      lineHeight: 1.4,
+    },
+    h6: {
+      fontWeight: 600,
+      fontSize: '1.125rem',
+      lineHeight: 1.4,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.6,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.6,
+    },
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  shadows: [
+    'none',
+    '0px 1px 2px rgba(0, 0, 0, 0.05)',
+    '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+    '0px 4px 6px rgba(0, 0, 0, 0.05), 0px 2px 4px rgba(0, 0, 0, 0.06)',
+    '0px 10px 15px rgba(0, 0, 0, 0.05), 0px 4px 6px rgba(0, 0, 0, 0.06)',
+    '0px 20px 25px rgba(0, 0, 0, 0.05), 0px 10px 10px rgba(0, 0, 0, 0.06)',
+    '0px 25px 50px rgba(0, 0, 0, 0.05), 0px 12px 24px rgba(0, 0, 0, 0.06)',
+    '0px 30px 60px rgba(0, 0, 0, 0.05), 0px 15px 30px rgba(0, 0, 0, 0.06)',
+    '0px 35px 70px rgba(0, 0, 0, 0.05), 0px 18px 36px rgba(0, 0, 0, 0.06)',
+    '0px 40px 80px rgba(0, 0, 0, 0.05), 0px 20px 40px rgba(0, 0, 0, 0.06)',
+    '0px 45px 90px rgba(0, 0, 0, 0.05), 0px 22px 44px rgba(0, 0, 0, 0.06)',
+    '0px 50px 100px rgba(0, 0, 0, 0.05), 0px 25px 50px rgba(0, 0, 0, 0.06)',
+    '0px 55px 110px rgba(0, 0, 0, 0.05), 0px 27px 55px rgba(0, 0, 0, 0.06)',
+    '0px 60px 120px rgba(0, 0, 0, 0.05), 0px 30px 60px rgba(0, 0, 0, 0.06)',
+    '0px 65px 130px rgba(0, 0, 0, 0.05), 0px 32px 65px rgba(0, 0, 0, 0.06)',
+    '0px 70px 140px rgba(0, 0, 0, 0.05), 0px 35px 70px rgba(0, 0, 0, 0.06)',
+    '0px 75px 150px rgba(0, 0, 0, 0.05), 0px 37px 75px rgba(0, 0, 0, 0.06)',
+    '0px 80px 160px rgba(0, 0, 0, 0.05), 0px 40px 80px rgba(0, 0, 0, 0.06)',
+    '0px 85px 170px rgba(0, 0, 0, 0.05), 0px 42px 85px rgba(0, 0, 0, 0.06)',
+    '0px 90px 180px rgba(0, 0, 0, 0.05), 0px 45px 90px rgba(0, 0, 0, 0.06)',
+    '0px 95px 190px rgba(0, 0, 0, 0.05), 0px 47px 95px rgba(0, 0, 0, 0.06)',
+    '0px 100px 200px rgba(0, 0, 0, 0.05), 0px 50px 100px rgba(0, 0, 0, 0.06)',
+    '0px 105px 210px rgba(0, 0, 0, 0.05), 0px 52px 105px rgba(0, 0, 0, 0.06)',
+    '0px 110px 220px rgba(0, 0, 0, 0.05), 0px 55px 110px rgba(0, 0, 0, 0.06)',
+    '0px 115px 230px rgba(0, 0, 0, 0.05), 0px 57px 115px rgba(0, 0, 0, 0.06)',
+    '0px 120px 240px rgba(0, 0, 0, 0.05), 0px 60px 120px rgba(0, 0, 0, 0.06)',
+  ],
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontWeight: 500,
+          borderRadius: 8,
+          padding: '8px 16px',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+          border: '1px solid #f3f4f6',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+        },
+      },
+    },
   },
 });
 
@@ -116,9 +238,10 @@ function App() {
     <Box>
       <Box
         sx={{
-          p: 3,
-          background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-          color: 'white',
+          p: 4,
+          background: 'background.paper',
+          borderBottom: '1px solid',
+          borderColor: 'grey.200',
           textAlign: 'center',
           minHeight: 120,
           display: 'flex',
@@ -127,11 +250,24 @@ function App() {
           alignItems: 'center'
         }}
       >
-        <SportsTennis sx={{ fontSize: 40, mb: 1 }} />
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        <Box
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
+            background: 'primary.main',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mb: 2
+          }}
+        >
+          <SportsTennis sx={{ fontSize: 24, color: 'white' }} />
+        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
           Tennis League
         </Typography>
-        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           Management System
         </Typography>
       </Box>
@@ -157,10 +293,10 @@ function App() {
                   },
                 },
                 '&:hover': {
-                  backgroundColor: 'primary.light',
-                  color: 'white',
+                  backgroundColor: 'grey.100',
+                  color: 'text.primary',
                   '& .MuiListItemIcon-root': {
-                    color: 'white',
+                    color: 'primary.main',
                   },
                 },
               }}
@@ -196,12 +332,14 @@ function App() {
         {/* App Bar */}
         <AppBar
           position="fixed"
+          elevation={0}
           sx={{
             width: { md: `calc(100% - ${drawerWidth}px)` },
             ml: { md: `${drawerWidth}px` },
-            backgroundColor: 'white',
-            color: 'primary.main',
-            boxShadow: 1,
+            backgroundColor: 'background.paper',
+            color: 'text.primary',
+            borderBottom: '1px solid',
+            borderColor: 'grey.200',
           }}
         >
           <Toolbar>
@@ -271,7 +409,7 @@ function App() {
             flexGrow: 1,
             width: { md: `calc(100% - ${drawerWidth}px)` },
             minHeight: '100vh',
-            backgroundColor: '#f5f5f5',
+            backgroundColor: 'background.default',
           }}
         >
           <Toolbar /> {/* Spacer for fixed app bar */}

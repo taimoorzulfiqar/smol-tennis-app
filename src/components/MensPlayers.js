@@ -80,19 +80,19 @@ const MensPlayers = () => {
   const getCategoryColor = (category) => {
     switch (category?.toLowerCase()) {
       case 'professional':
-        return '#2e7d32';
+        return '#10b981';
       case 'amateur':
-        return '#1976d2';
+        return '#6366f1';
       case 'junior':
-        return '#ff6f00';
+        return '#f59e0b';
       case 'advanced':
-        return '#d32f2f';
+        return '#ef4444';
       case 'intermediate':
-        return '#1976d2';
+        return '#6366f1';
       case 'beginner':
-        return '#ff6f00';
+        return '#f59e0b';
       default:
-        return '#757575';
+        return '#6b7280';
     }
   };
 
@@ -136,23 +136,14 @@ const MensPlayers = () => {
   return (
     <Box>
       {/* Header */}
-      <Paper 
-        sx={{ 
-          p: 4, 
-          mb: 4, 
-          background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-          color: 'white',
-          textAlign: 'center'
-        }}
-      >
-        <SportsTennis sx={{ fontSize: 60, mb: 2 }} />
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>
           Men's Tennis Players
         </Typography>
-        <Typography variant="h6" sx={{ opacity: 0.9 }}>
+        <Typography variant="h6" sx={{ color: 'text.secondary', mb: 3 }}>
           Player Profiles and Statistics
         </Typography>
-      </Paper>
+      </Box>
 
       {/* Error Alert */}
       {error && (
@@ -165,16 +156,35 @@ const MensPlayers = () => {
       <Grid container spacing={3} mb={4}>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Person sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: 'primary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <Person sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.totalPlayers}
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Total Players
               </Typography>
             </CardContent>
@@ -182,16 +192,35 @@ const MensPlayers = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #ff6f00 0%, #ff9800 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <SportsTennis sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: 'secondary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <SportsTennis sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.totalMatches}
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Total Matches
               </Typography>
             </CardContent>
@@ -199,16 +228,35 @@ const MensPlayers = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <TrendingUp sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <TrendingUp sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.avgWinRate}%
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Average Win Rate
               </Typography>
             </CardContent>
@@ -217,10 +265,10 @@ const MensPlayers = () => {
       </Grid>
 
       {/* Player Table */}
-      <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
-            🎾 Player Profiles
+      <Paper sx={{ p: 4, borderRadius: 3, border: '1px solid', borderColor: 'grey.200' }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+          <Typography variant="h4" component="h2" sx={{ fontWeight: 600, color: 'text.primary' }}>
+            Player Profiles
           </Typography>
           <Box display="flex" alignItems="center" gap={2}>
             <TextField
@@ -231,23 +279,35 @@ const MensPlayers = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search />
+                    <Search sx={{ color: 'text.secondary' }} />
                   </InputAdornment>
                 ),
               }}
               sx={{ 
                 width: 300,
                 '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: 'grey.300',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'grey.400',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                  },
                 }
               }}
             />
             <IconButton 
               onClick={handleRefresh}
               sx={{ 
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'primary.dark' }
+                backgroundColor: 'grey.100',
+                color: 'text.primary',
+                '&:hover': { 
+                  backgroundColor: 'grey.200',
+                  color: 'primary.main'
+                }
               }}
             >
               <Refresh />
@@ -259,22 +319,25 @@ const MensPlayers = () => {
           <Table>
             <TableHead>
               <TableRow sx={{ 
-                background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-                color: 'white'
+                backgroundColor: 'grey.50',
+                borderBottom: '2px solid',
+                borderColor: 'grey.200'
               }}>
                 {headers.map((header, index) => (
                   <TableCell 
                     key={index} 
                     sx={{ 
-                      fontWeight: 'bold',
-                      color: 'white',
-                      fontSize: '1.1rem'
+                      fontWeight: 600,
+                      color: 'text.primary',
+                      fontSize: '0.875rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
                     }}
                   >
                     {header}
                   </TableCell>
                 ))}
-                <TableCell sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>
+                <TableCell sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Win Rate
                 </TableCell>
               </TableRow>
@@ -287,25 +350,26 @@ const MensPlayers = () => {
                     key={rowIndex}
                     sx={{ 
                       '&:hover': { 
-                        backgroundColor: '#f0f8f0',
-                        transform: 'scale(1.01)',
-                        transition: 'all 0.2s ease-in-out'
+                        backgroundColor: 'grey.50',
+                        transition: 'background-color 0.2s ease'
                       },
-                      transition: 'all 0.2s ease-in-out'
+                      transition: 'background-color 0.2s ease',
+                      borderBottom: '1px solid',
+                      borderColor: 'grey.100'
                     }}
                   >
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={2}>
                         <Avatar sx={{ 
-                          bgcolor: '#2e7d32',
-                          width: 45,
-                          height: 45,
-                          fontSize: '1.2rem',
-                          fontWeight: 'bold'
+                          bgcolor: 'primary.main',
+                          width: 40,
+                          height: 40,
+                          fontSize: '0.875rem',
+                          fontWeight: 600
                         }}>
                           {row[0]?.split(' ').map(n => n[0]).join('')}
                         </Avatar>
-                        <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
                           {row[0]}
                         </Typography>
                       </Box>
@@ -323,9 +387,11 @@ const MensPlayers = () => {
                         label={row[5]} 
                         size="small" 
                         sx={{ 
-                          backgroundColor: getCategoryColor(row[5]),
-                          color: 'white',
-                          fontWeight: 'bold'
+                          backgroundColor: 'grey.100',
+                          color: 'text.primary',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                          height: 24
                         }}
                       />
                     </TableCell>
@@ -358,11 +424,11 @@ const MensPlayers = () => {
       </Paper>
 
       {/* Footer */}
-      <Paper sx={{ p: 3, mt: 4, textAlign: 'center' }}>
+      <Box sx={{ mt: 4, textAlign: 'center' }}>
         <Typography variant="body2" color="text.secondary">
           Data sourced from Google Sheets • Men's Tennis League Statistics
         </Typography>
-      </Paper>
+      </Box>
     </Box>
   );
 };

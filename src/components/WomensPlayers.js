@@ -80,19 +80,19 @@ const WomensPlayers = () => {
   const getCategoryColor = (category) => {
     switch (category?.toLowerCase()) {
       case 'professional':
-        return '#e91e63';
+        return '#10b981';
       case 'amateur':
-        return '#9c27b0';
+        return '#6366f1';
       case 'junior':
-        return '#ff9800';
+        return '#f59e0b';
       case 'advanced':
-        return '#f44336';
+        return '#ef4444';
       case 'intermediate':
-        return '#9c27b0';
+        return '#6366f1';
       case 'beginner':
-        return '#ff9800';
+        return '#f59e0b';
       default:
-        return '#757575';
+        return '#6b7280';
     }
   };
 
@@ -136,23 +136,14 @@ const WomensPlayers = () => {
   return (
     <Box>
       {/* Header */}
-      <Paper 
-        sx={{ 
-          p: 4, 
-          mb: 4, 
-          background: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)',
-          color: 'white',
-          textAlign: 'center'
-        }}
-      >
-        <SportsTennis sx={{ fontSize: 60, mb: 2 }} />
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>
           Women's Tennis Players
         </Typography>
-        <Typography variant="h6" sx={{ opacity: 0.9 }}>
+        <Typography variant="h6" sx={{ color: 'text.secondary', mb: 3 }}>
           Player Profiles and Statistics
         </Typography>
-      </Paper>
+      </Box>
 
       {/* Error Alert */}
       {error && (
@@ -165,16 +156,35 @@ const WomensPlayers = () => {
       <Grid container spacing={3} mb={4}>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Person sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: 'primary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <Person sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.totalPlayers}
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Total Players
               </Typography>
             </CardContent>
@@ -182,16 +192,35 @@ const WomensPlayers = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <SportsTennis sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: 'secondary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <SportsTennis sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.totalMatches}
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Total Matches
               </Typography>
             </CardContent>
@@ -199,16 +228,35 @@ const WomensPlayers = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)',
-            color: 'white',
-            boxShadow: 3
+            background: 'background.paper',
+            border: '1px solid',
+            borderColor: 'grey.200',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.1)',
+            }
           }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <TrendingUp sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <CardContent sx={{ textAlign: 'center', p: 3 }}>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 2
+                }}
+              >
+                <TrendingUp sx={{ fontSize: 28, color: 'white' }} />
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
                 {stats.avgWinRate}%
               </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 Average Win Rate
               </Typography>
             </CardContent>
