@@ -88,16 +88,45 @@ const MensTennisApp = () => {
           </Typography>
         </Paper>
 
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Connection Error
+            </Typography>
+            <Typography variant="body2">
+              {error}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Please check your service account configuration in Vercel environment variables.
+            </Typography>
+          </Alert>
+        )}
+
         <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h5" gutterBottom>
-            Configuration Required
+            {isLoading ? 'Loading Data...' : 'No Data Available'}
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
-            Please update the API key in config.js file to connect to your Google Sheets.
+            {isLoading 
+              ? 'Connecting to your Google Sheets...' 
+              : 'Unable to load data from Google Sheets. Please check your configuration.'
+            }
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Current Spreadsheet ID: {sheetsData.spreadsheetId || 'Not configured'}
-          </Typography>
+          {!isLoading && (
+            <Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Current Spreadsheet ID: {sheetsData.spreadsheetId || 'Not configured'}
+              </Typography>
+              <Button 
+                variant="contained" 
+                onClick={() => fetchSheetData()}
+                startIcon={<Refresh />}
+                sx={{ mt: 2 }}
+              >
+                Retry Connection
+              </Button>
+            </Box>
+          )}
         </Paper>
       </Box>
     );
@@ -190,39 +219,51 @@ const MensTennisApp = () => {
       {/* Statistics Cards */}
       <Grid container spacing={3} mb={4}>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
+            color: 'white',
+            boxShadow: 3
+          }}>
             <CardContent sx={{ textAlign: 'center' }}>
-              <Person sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
-              <Typography variant="h4" color="primary">
+              <Person sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
                 {stats.totalPlayers}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="h6" sx={{ opacity: 0.9 }}>
                 Total Players
               </Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #ff6f00 0%, #ff9800 100%)',
+            color: 'white',
+            boxShadow: 3
+          }}>
             <CardContent sx={{ textAlign: 'center' }}>
-              <SportsTennis sx={{ fontSize: 40, color: 'secondary.main', mb: 1 }} />
-              <Typography variant="h4" color="secondary">
+              <SportsTennis sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
                 {stats.totalMatches}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="h6" sx={{ opacity: 0.9 }}>
                 Total Matches
               </Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
+            color: 'white',
+            boxShadow: 3
+          }}>
             <CardContent sx={{ textAlign: 'center' }}>
-              <TrendingUp sx={{ fontSize: 40, color: 'success.main', mb: 1 }} />
-              <Typography variant="h4" color="success.main">
+              <TrendingUp sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
                 {stats.avgWinRate}%
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="h6" sx={{ opacity: 0.9 }}>
                 Average Win Rate
               </Typography>
             </CardContent>
@@ -231,10 +272,10 @@ const MensTennisApp = () => {
       </Grid>
 
       {/* Player Table */}
-      <Paper sx={{ p: 2 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h5" component="h2">
-            Player Profiles
+      <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
+            🎾 Player Profiles
           </Typography>
           <Box display="flex" alignItems="center" gap={2}>
             <TextField
@@ -249,35 +290,49 @@ const MensTennisApp = () => {
                   </InputAdornment>
                 ),
               }}
-              sx={{ width: 300 }}
+              sx={{ 
+                width: 300,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2
+                }
+              }}
             />
             <IconButton 
               onClick={() => fetchSheetData()}
               disabled={isLoading}
               color="primary"
               title="Refresh data from Google Sheets"
+              sx={{ 
+                backgroundColor: '#2e7d32',
+                color: 'white',
+                '&:hover': { backgroundColor: '#1b5e20' }
+              }}
             >
               <Refresh />
             </IconButton>
           </Box>
         </Box>
         
-        <TableContainer>
+        <TableContainer sx={{ borderRadius: 2, overflow: 'hidden' }}>
           <Table>
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow sx={{ 
+                background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
+                color: 'white'
+              }}>
                 {headers.map((header, index) => (
                   <TableCell 
                     key={index} 
                     sx={{ 
                       fontWeight: 'bold',
-                      color: header === 'Name' ? '#2e7d32' : 'inherit'
+                      color: 'white',
+                      fontSize: '1.1rem'
                     }}
                   >
                     {header}
                   </TableCell>
                 ))}
-                <TableCell sx={{ fontWeight: 'bold' }}>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>
                   Win Rate
                 </TableCell>
               </TableRow>
@@ -289,15 +344,26 @@ const MensTennisApp = () => {
                   <TableRow 
                     key={rowIndex}
                     sx={{ 
-                      '&:hover': { backgroundColor: '#f9f9f9' }
+                      '&:hover': { 
+                        backgroundColor: '#f0f8f0',
+                        transform: 'scale(1.01)',
+                        transition: 'all 0.2s ease-in-out'
+                      },
+                      transition: 'all 0.2s ease-in-out'
                     }}
                   >
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={2}>
-                        <Avatar sx={{ bgcolor: '#2e7d32' }}>
+                        <Avatar sx={{ 
+                          bgcolor: '#2e7d32',
+                          width: 45,
+                          height: 45,
+                          fontSize: '1.2rem',
+                          fontWeight: 'bold'
+                        }}>
                           {row[0]?.split(' ').map(n => n[0]).join('')}
                         </Avatar>
-                        <Typography variant="body1" fontWeight="bold">
+                        <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>
                           {row[0]}
                         </Typography>
                       </Box>
