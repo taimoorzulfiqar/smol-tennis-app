@@ -12,10 +12,6 @@ import {
   TablePagination,
   TextField,
   InputAdornment,
-  Card,
-  CardContent,
-  Grid,
-  Chip,
   CircularProgress,
   Alert,
   IconButton,
@@ -23,8 +19,6 @@ import {
 import {
   Search,
   SportsTennis,
-  Schedule,
-  TrendingUp,
   Refresh,
 } from '@mui/icons-material';
 import { useGoogleSheets } from '../context/GoogleSheetsContext';
@@ -38,7 +32,10 @@ const MensMatches = () => {
   // Fetch men's matches data
   useEffect(() => {
     if (config.spreadsheetId) {
-      fetchSheetData(config.spreadsheetId, 'MenMatches!A:Z');
+      // Use the correct sheet name: 'Mens Matches'
+      fetchSheetData(config.spreadsheetId, 'Mens Matches!A:Z').catch(() => {
+        console.log('Mens Matches sheet not found, using fallback data');
+      });
     }
   }, [config.spreadsheetId, fetchSheetData]);
 
@@ -48,18 +45,18 @@ const MensMatches = () => {
       return sheetsData.values;
     }
     
-    // Fallback data if no Google Sheets data
-    return [
-      ['Date', 'Player 1', 'Player 2', 'Score', 'Winner', 'Duration', 'Tournament'],
-      ['2024-01-15', 'Taimoor Zulfiqar', 'Ahmed', '6-4, 6-2', 'Taimoor Zulfiqar', '1h 45m', 'Winter Cup'],
-      ['2024-01-20', 'Farhan', 'Bilal', '4-6, 6-4, 7-5', 'Bilal', '2h 15m', 'Winter Cup'],
-      ['2024-01-25', 'Umer', 'Hassan', '6-1, 6-0', 'Hassan', '1h 20m', 'Winter Cup'],
-      ['2024-02-01', 'Ahmed', 'Usman', '6-3, 6-4', 'Ahmed', '1h 55m', 'Spring League'],
-      ['2024-02-05', 'Taimoor Zulfiqar', 'Bilal', '7-5, 6-3', 'Taimoor Zulfiqar', '2h 10m', 'Spring League'],
-      ['2024-02-10', 'Farhan', 'Umer', '6-2, 6-2', 'Farhan', '1h 30m', 'Spring League'],
-      ['2024-02-15', 'Hassan', 'Usman', '6-4, 7-6', 'Hassan', '2h 05m', 'Spring League'],
-      ['2024-02-20', 'Ahmed', 'Bilal', '5-7, 6-4, 6-2', 'Ahmed', '2h 35m', 'Spring League']
-    ];
+         // Fallback data if no Google Sheets data
+     return [
+       ['Match', 'Player 1', 'Player 2', 'Player 1 Score', 'Player 2 Score', 'Winner'],
+       ['1', 'Taimoor Zulfiqar', 'Ahmed', '6-4, 6-2', '4-6, 2-6', 'Taimoor Zulfiqar'],
+       ['2', 'Farhan', 'Bilal', '4-6, 6-4, 7-5', '6-4, 4-6, 5-7', 'Farhan'],
+       ['3', 'Umer', 'Hassan', '6-1, 6-0', '1-6, 0-6', 'Umer'],
+       ['4', 'Ahmed', 'Usman', '6-3, 6-4', '3-6, 4-6', 'Ahmed'],
+       ['5', 'Taimoor Zulfiqar', 'Bilal', '7-5, 6-3', '5-7, 3-6', 'Taimoor Zulfiqar'],
+       ['6', 'Farhan', 'Umer', '6-2, 6-2', '2-6, 2-6', 'Farhan'],
+       ['7', 'Hassan', 'Usman', '6-4, 7-6', '4-6, 6-7', 'Hassan'],
+       ['8', 'Ahmed', 'Bilal', '5-7, 6-4, 6-2', '7-5, 4-6, 2-6', 'Ahmed']
+     ];
   };
 
   const matchData = getMatchData();
@@ -69,26 +66,10 @@ const MensMatches = () => {
   const filteredData = dataRows.filter(row => 
     (row[1] && row[1].toLowerCase().includes(searchTerm.toLowerCase())) ||
     (row[2] && row[2].toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (row[4] && row[4].toLowerCase().includes(searchTerm.toLowerCase()))
+    (row[5] && row[5].toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const getMatchStatus = (winner, player1, player2) => {
-    if (!winner) return 'Scheduled';
-    return 'Completed';
-  };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Completed':
-        return '#2e7d32';
-      case 'Scheduled':
-        return '#1976d2';
-      case 'In Progress':
-        return '#ff9800';
-      default:
-        return '#757575';
-    }
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -99,31 +80,11 @@ const MensMatches = () => {
     setPage(0);
   };
 
-  const getStats = () => {
-    if (dataRows.length === 0) return { totalMatches: 0, completedMatches: 0, avgDuration: 0 };
-    
-    const totalMatches = dataRows.length;
-    const completedMatches = dataRows.filter(row => row[4]).length;
-    const durations = dataRows
-      .filter(row => row[5])
-      .map(row => {
-        const duration = row[5];
-        const match = duration.match(/(\d+)h\s*(\d+)m/);
-        if (match) {
-          return parseInt(match[1]) * 60 + parseInt(match[2]);
-        }
-        return 0;
-      });
-    const avgDuration = durations.length > 0 ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
-    
-    return { totalMatches, completedMatches, avgDuration };
-  };
 
-  const stats = getStats();
 
   const handleRefresh = () => {
     if (config.spreadsheetId) {
-      fetchSheetData(config.spreadsheetId, 'MenMatches!A:Z');
+      fetchSheetData(config.spreadsheetId, 'Mens Matches!A:Z');
     }
   };
 
@@ -163,60 +124,7 @@ const MensMatches = () => {
         </Alert>
       )}
 
-      {/* Statistics Cards */}
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
-            color: 'white',
-            boxShadow: 3
-          }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <SportsTennis sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
-                {stats.totalMatches}
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                Total Matches
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-            color: 'white',
-            boxShadow: 3
-          }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Schedule sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
-                {stats.completedMatches}
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                Completed Matches
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'linear-gradient(135deg, #ff6f00 0%, #ff9800 100%)',
-            color: 'white',
-            boxShadow: 3
-          }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <TrendingUp sx={{ fontSize: 50, mb: 2, opacity: 0.9 }} />
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
-                {Math.floor(stats.avgDuration / 60)}h {stats.avgDuration % 60}m
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                Average Duration
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+
 
       {/* Matches Table */}
       <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
@@ -276,85 +184,61 @@ const MensMatches = () => {
                     {header}
                   </TableCell>
                 ))}
-                <TableCell sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.1rem' }}>
-                  Status
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, rowIndex) => {
-                  const status = getMatchStatus(row[4], row[1], row[2]);
-                  return (
-                    <TableRow 
-                      key={rowIndex}
-                      sx={{ 
-                        '&:hover': { 
-                          backgroundColor: '#f0f8f0',
-                          transform: 'scale(1.01)',
-                          transition: 'all 0.2s ease-in-out'
-                        },
+                .map((row, rowIndex) => (
+                  <TableRow 
+                    key={rowIndex}
+                    sx={{ 
+                      '&:hover': { 
+                        backgroundColor: '#f0f8f0',
+                        transform: 'scale(1.01)',
                         transition: 'all 0.2s ease-in-out'
-                      }}
-                    >
-                      <TableCell>
-                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                          {new Date(row[0]).toLocaleDateString()}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                          {row[1]}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                          {row[2]}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
-                          {row[3]}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography 
-                          variant="body1" 
-                          sx={{ 
-                            fontWeight: 'bold',
-                            color: status === 'Completed' ? 'success.main' : 'inherit'
-                          }}
-                        >
-                          {row[4] || 'TBD'}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>{row[5]}</TableCell>
-                      <TableCell>
-                        <Chip 
-                          label={row[6]} 
-                          size="small" 
-                          sx={{ 
-                            backgroundColor: '#1976d2',
-                            color: 'white',
-                            fontWeight: 'bold'
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Chip 
-                          label={status} 
-                          size="small" 
-                          sx={{ 
-                            backgroundColor: getStatusColor(status),
-                            color: 'white',
-                            fontWeight: 'bold'
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                      },
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                  >
+                                         <TableCell>
+                       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                         {row[0]}
+                       </Typography>
+                     </TableCell>
+                     <TableCell>
+                       <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                         {row[1]}
+                       </Typography>
+                     </TableCell>
+                     <TableCell>
+                       <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                         {row[2]}
+                       </Typography>
+                     </TableCell>
+                     <TableCell>
+                       <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+                         {row[3]}
+                       </Typography>
+                     </TableCell>
+                     <TableCell>
+                       <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+                         {row[4]}
+                       </Typography>
+                     </TableCell>
+                     <TableCell>
+                       <Typography 
+                         variant="body1" 
+                         sx={{ 
+                           fontWeight: 'bold',
+                           color: 'success.main'
+                         }}
+                       >
+                         {row[5] || 'TBD'}
+                       </Typography>
+                     </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

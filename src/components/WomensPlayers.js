@@ -23,9 +23,7 @@ import {
 } from '@mui/material';
 import {
   Search,
-  SportsTennis,
   TrendingUp,
-  Person,
   Refresh,
 } from '@mui/icons-material';
 import { useGoogleSheets } from '../context/GoogleSheetsContext';
@@ -66,10 +64,25 @@ const WomensPlayers = React.memo(() => {
   const headers = useMemo(() => playerData[0] || [], [playerData]);
   const dataRows = useMemo(() => playerData.slice(1) || [], [playerData]);
 
+  // Sort data by games won in descending order and add rank
+  const sortedAndRankedData = useMemo(() => {
+    return dataRows
+      .map((row, index) => ({
+        ...row,
+        originalIndex: index,
+        gamesWon: parseInt(row[4]) || 0
+      }))
+      .sort((a, b) => b.gamesWon - a.gamesWon)
+      .map((player, index) => ({
+        ...player,
+        rank: index + 1
+      }));
+  }, [dataRows]);
+
   const filteredData = useMemo(() => 
-    dataRows.filter(row => 
+    sortedAndRankedData.filter(row => 
       row[0] && row[0].toLowerCase().includes(searchTerm.toLowerCase())
-    ), [dataRows, searchTerm]);
+    ), [sortedAndRankedData, searchTerm]);
 
   const getWinRate = useCallback((won, lost) => {
     const total = parseInt(won) + parseInt(lost);
@@ -96,6 +109,19 @@ const WomensPlayers = React.memo(() => {
     }
   }, []);
 
+  const getRankColor = useCallback((rank) => {
+    switch (rank) {
+      case 1:
+        return '#FFD700'; // Gold
+      case 2:
+        return '#C0C0C0'; // Silver
+      case 3:
+        return '#CD7F32'; // Bronze
+      default:
+        return '#757575';
+    }
+  }, []);
+
   const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
   }, []);
@@ -105,17 +131,7 @@ const WomensPlayers = React.memo(() => {
     setPage(0);
   }, []);
 
-  const stats = useMemo(() => {
-    if (dataRows.length === 0) return { totalPlayers: 0, totalMatches: 0, avgWinRate: 0 };
-    
-    const totalPlayers = dataRows.length;
-    const totalMatches = dataRows.reduce((sum, row) => sum + (parseInt(row[1]) || 0), 0);
-    const totalWins = dataRows.reduce((sum, row) => sum + (parseInt(row[2]) || 0), 0);
-    const totalLosses = dataRows.reduce((sum, row) => sum + (parseInt(row[3]) || 0), 0);
-    const avgWinRate = totalMatches > 0 ? Math.round((totalWins / (totalWins + totalLosses)) * 100) : 0;
-    
-    return { totalPlayers, totalMatches, avgWinRate };
-  }, [dataRows]);
+
 
   const handleRefresh = useCallback(() => {
     if (config.spreadsheetId) {
@@ -155,117 +171,7 @@ const WomensPlayers = React.memo(() => {
         </Alert>
       )}
 
-      {/* Statistics Cards */}
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'background.paper',
-            border: '1px solid',
-            borderColor: 'grey.300',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
-            }
-          }}>
-            <CardContent sx={{ textAlign: 'center', p: 3 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  background: 'primary.main',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  mb: 2
-                }}
-              >
-                <Person sx={{ fontSize: 28, color: 'white' }} />
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
-                {stats.totalPlayers}
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-                Total Players
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'background.paper',
-            border: '1px solid',
-            borderColor: 'grey.300',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
-            }
-          }}>
-            <CardContent sx={{ textAlign: 'center', p: 3 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  background: 'secondary.main',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  mb: 2
-                }}
-              >
-                <SportsTennis sx={{ fontSize: 28, color: 'white' }} />
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
-                {stats.totalMatches}
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-                Total Matches
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            background: 'background.paper',
-            border: '1px solid',
-            borderColor: 'grey.300',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.5)',
-            }
-          }}>
-            <CardContent sx={{ textAlign: 'center', p: 3 }}>
-              <Box
-                sx={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  background: '#10b981',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  mb: 2
-                }}
-              >
-                <TrendingUp sx={{ fontSize: 28, color: 'white' }} />
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
-                {stats.avgWinRate}%
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-                Average Win Rate
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+
 
       {/* Player Table */}
       <Paper sx={{ p: 4, borderRadius: 3, border: '1px solid', borderColor: 'grey.300' }}>
@@ -321,60 +227,74 @@ const WomensPlayers = React.memo(() => {
         <TableContainer sx={{ borderRadius: 2, overflow: 'hidden' }}>
           <Table>
             <TableHead>
-                             <TableRow sx={{ 
-                 backgroundColor: 'grey.100',
-                 borderBottom: '2px solid',
-                 borderColor: 'grey.300'
-               }}>
+              <TableRow sx={{ 
+                backgroundColor: 'grey.100',
+                borderBottom: '2px solid',
+                borderColor: 'grey.300'
+              }}>
+                <TableCell sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Rank
+                </TableCell>
                 {headers.map((header, index) => (
-                                     <TableCell 
-                     key={index} 
-                     sx={{ 
-                       fontWeight: 600,
-                       color: 'text.primary',
-                       fontSize: '0.875rem',
-                       textTransform: 'uppercase',
-                       letterSpacing: '0.05em'
-                     }}
-                   >
-                     {header}
-                   </TableCell>
-                 ))}
-                 <TableCell sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                   Win Rate
-                 </TableCell>
+                  <TableCell 
+                    key={index} 
+                    sx={{ 
+                      fontWeight: 600,
+                      color: 'text.primary',
+                      fontSize: '0.875rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    {header}
+                  </TableCell>
+                ))}
+                <TableCell sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Win Rate
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, rowIndex) => (
-                                     <TableRow 
-                     key={rowIndex}
-                     sx={{ 
-                       '&:hover': { 
-                         backgroundColor: 'grey.200',
-                         transition: 'background-color 0.2s ease'
-                       },
-                       transition: 'background-color 0.2s ease',
-                       borderBottom: '1px solid',
-                       borderColor: 'grey.200'
-                     }}
-                   >
+                  <TableRow 
+                    key={rowIndex}
+                    sx={{ 
+                      '&:hover': { 
+                        backgroundColor: 'grey.200',
+                        transition: 'background-color 0.2s ease'
+                      },
+                      transition: 'background-color 0.2s ease',
+                      borderBottom: '1px solid',
+                      borderColor: 'grey.200'
+                    }}
+                  >
+                    <TableCell>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 'bold',
+                          color: row.rank <= 3 ? getRankColor(row.rank) : 'inherit'
+                        }}
+                      >
+                        #{row.rank}
+                      </Typography>
+                    </TableCell>
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={2}>
-                                                 <Avatar sx={{ 
-                           bgcolor: 'primary.main',
-                           width: 40,
-                           height: 40,
-                           fontSize: '0.875rem',
-                           fontWeight: 600
-                         }}>
+                        <Avatar sx={{ 
+                          bgcolor: 'primary.main',
+                          width: 40,
+                          height: 40,
+                          fontSize: '0.875rem',
+                          fontWeight: 600
+                        }}>
                           {row[0]?.split(' ').map(n => n[0]).join('')}
                         </Avatar>
-                                                 <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                           {row[0]}
-                         </Typography>
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                          {row[0]}
+                        </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>{row[1]}</TableCell>
@@ -386,17 +306,17 @@ const WomensPlayers = React.memo(() => {
                     </TableCell>
                     <TableCell>{row[4]}</TableCell>
                     <TableCell>
-                                             <Chip 
-                         label={row[5]} 
-                         size="small" 
-                         sx={{ 
-                           backgroundColor: 'grey.200',
-                           color: 'text.primary',
-                           fontWeight: 500,
-                           fontSize: '0.75rem',
-                           height: 24
-                         }}
-                       />
+                      <Chip 
+                        label={row[5]} 
+                        size="small" 
+                        sx={{ 
+                          backgroundColor: 'grey.200',
+                          color: 'text.primary',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                          height: 24
+                        }}
+                      />
                     </TableCell>
                     <TableCell>
                       <Typography 

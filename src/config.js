@@ -9,8 +9,10 @@
 // 5. The app will read from different sheets:
 //    - Men!A:Z for men's players data
 //    - Women!A:Z for women's players data  
-//    - MenMatches!A:Z for men's matches data
-//    - WomenMatches!A:Z for women's matches data
+//    - Mens Matches!A:Z for men's matches data
+//    - Womens Matches!A:Z for women's matches data
+//    - Mens Leaderboard!A:Z for men's leaderboard data
+//    - Womens Leaderboard!A:Z for women's leaderboard data
 //
 // ALTERNATIVE (API Key Method):
 // 1. Set useServiceAccount to false
@@ -26,8 +28,10 @@ const config = {
   // Sheet ranges for different sections:
   // - Men's Players: 'Men!A:Z'
   // - Women's Players: 'Women!A:Z'
-  // - Men's Matches: 'MenMatches!A:Z'
-  // - Women's Matches: 'WomenMatches!A:Z'
+  // - Men's Matches: 'Mens Matches!A:Z'
+  // - Women's Matches: 'Womens Matches!A:Z'
+  // - Men's Leaderboard: 'Mens Leaderboard!A:Z'
+  // - Women's Leaderboard: 'Womens Leaderboard!A:Z'
   // The default range is for men's players (legacy compatibility)
   range: 'Men!A:Z',
   
@@ -37,7 +41,7 @@ const config = {
   // API Base URL - handles both development and production
   apiBaseUrl: process.env.NODE_ENV === 'production' 
     ? '' // Empty string for Vercel (uses same domain)
-    : 'http://localhost:3001'
+    : '' // Empty string for development (uses proxy)
 };
 
 export default config;

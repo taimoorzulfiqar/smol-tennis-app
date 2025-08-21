@@ -35,8 +35,6 @@ import MensPlayers from './components/MensPlayers';
 import WomensPlayers from './components/WomensPlayers';
 import MensMatches from './components/MensMatches';
 import WomensMatches from './components/WomensMatches';
-import MensLeaderboard from './components/MensLeaderboard';
-import WomensLeaderboard from './components/WomensLeaderboard';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Error Boundary Component
@@ -249,18 +247,6 @@ const menuItems = [
     icon: <Schedule />,
     component: WomensMatches,
     path: 'womens-matches'
-  },
-  {
-    text: "Men's Leaderboard",
-    icon: <EmojiEvents />,
-    component: MensLeaderboard,
-    path: 'mens-leaderboard'
-  },
-  {
-    text: "Women's Leaderboard",
-    icon: <EmojiEvents />,
-    component: WomensLeaderboard,
-    path: 'womens-leaderboard'
   }
 ];
 

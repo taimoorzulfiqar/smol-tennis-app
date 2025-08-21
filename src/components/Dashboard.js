@@ -32,9 +32,10 @@ import { useGoogleSheets } from '../context/GoogleSheetsContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const Dashboard = () => {
-  const { sheetsData, isLoading, error, config, fetchSheetData } = useGoogleSheets();
+  const { sheetsData, isLoading, error, config, fetchSheetData, startPolling, stopPolling } = useGoogleSheets();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
 
   React.useEffect(() => {
     if (sheetsData.values && sheetsData.values.length > 0) {
@@ -53,7 +54,17 @@ const Dashboard = () => {
 
   const handleRefresh = () => {
     if (config.spreadsheetId) {
-      fetchSheetData(config.spreadsheetId, config.range);
+      fetchSheetData(config.spreadsheetId, config.range, true); // Force refresh
+    }
+  };
+
+  const toggleAutoRefresh = () => {
+    if (autoRefreshEnabled) {
+      stopPolling();
+      setAutoRefreshEnabled(false);
+    } else {
+      startPolling();
+      setAutoRefreshEnabled(true);
     }
   };
 
@@ -126,8 +137,17 @@ const Dashboard = () => {
             startIcon={<Refresh />}
             onClick={handleRefresh}
             disabled={isLoading}
+            sx={{ mr: 1 }}
           >
             Refresh
+          </Button>
+          <Button
+            variant={autoRefreshEnabled ? "contained" : "outlined"}
+            color={autoRefreshEnabled ? "success" : "default"}
+            onClick={toggleAutoRefresh}
+            disabled={isLoading}
+          >
+            Auto-Refresh {autoRefreshEnabled ? "ON" : "OFF"}
           </Button>
         </Box>
       </Box>
@@ -180,7 +200,13 @@ const Dashboard = () => {
                         <EmojiEvents color="success" sx={{ mr: 1 }} />
                         <Typography variant="h6">Status</Typography>
                       </Box>
-                      <Chip label="Connected" color="success" />
+                      <Chip 
+                        label={autoRefreshEnabled ? "Auto-Refresh ON" : "Auto-Refresh OFF"} 
+                        color={autoRefreshEnabled ? "success" : "default"} 
+                      />
+                      <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                        Updates every 2 minutes
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>

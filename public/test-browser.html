@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch('/api/sheets?spreadsheetId=1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU&range=Men!A:Z&useServiceAccount=true');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ Success!</h3>
+                    <p>Status: ${response.status}</p>
+                    <p>Data rows: ${data.values ? data.values.length : 0}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ Error!</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

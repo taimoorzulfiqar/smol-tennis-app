@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import axios from 'axios';
 import configFile from '../config.js';
 
@@ -24,15 +24,18 @@ export const GoogleSheetsProvider = ({ children }) => {
     useServiceAccount: configFile.useServiceAccount,
     apiBaseUrl: configFile.apiBaseUrl,
   });
+  
+  // Add polling interval reference
+  const pollingIntervalRef = useRef(null);
 
-  const fetchSheetData = useCallback(async (spreadsheetId, range = 'A:Z') => {
+  const fetchSheetData = useCallback(async (spreadsheetId, range = 'A:Z', forceRefresh = false) => {
     if (!spreadsheetId) return;
     
-    // Check cache first
+    // Check cache first (unless forcing refresh)
     const cacheKey = `${spreadsheetId}-${range}`;
     const cachedData = dataCache.get(cacheKey);
     
-    if (cachedData && Date.now() - cachedData.timestamp < 30000) { // 30 second cache
+    if (!forceRefresh && cachedData && Date.now() - cachedData.timestamp < 30000) { // 30 second cache
       setSheetsData(cachedData.data);
       return;
     }
@@ -52,6 +55,7 @@ export const GoogleSheetsProvider = ({ children }) => {
       }
       
       const apiUrl = config.apiBaseUrl ? `${config.apiBaseUrl}/api/sheets` : '/api/sheets';
+      console.log('Making API request to:', apiUrl, 'with params:', params.toString());
       const response = await axios.get(`${apiUrl}?${params.toString()}`);
       
       // Cache the response
@@ -61,13 +65,42 @@ export const GoogleSheetsProvider = ({ children }) => {
       })));
       
       setSheetsData(response.data);
+      console.log('Successfully fetched data:', response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch sheet data');
       console.error('Error fetching sheet data:', err);
+      // Only set error if it's not a 404 (sheet not found) error
+      if (err.response?.status !== 404) {
+        setError(err.response?.data?.message || 'Failed to fetch sheet data');
+      } else {
+        console.log('Sheet not found, using fallback data');
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [config.useServiceAccount, config.apiKey, dataCache]);
+  }, [config.useServiceAccount, config.apiKey, config.apiBaseUrl, dataCache]);
+
+  // Start automatic polling
+  const startPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+    }
+    
+    // Poll every 2 minutes (120000ms)
+    pollingIntervalRef.current = setInterval(() => {
+      if (config.spreadsheetId) {
+        console.log('Auto-refreshing data from Google Sheets...');
+        fetchSheetData(config.spreadsheetId, config.range, true); // Force refresh
+      }
+    }, 120000); // 2 minutes
+  }, [config.spreadsheetId, config.range, fetchSheetData]);
+
+  // Stop polling
+  const stopPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  }, []);
 
   const updateConfig = useCallback((newConfig) => {
     setConfig(newConfig);
@@ -82,16 +115,27 @@ export const GoogleSheetsProvider = ({ children }) => {
     config,
     fetchSheetData,
     updateConfig,
-  }), [sheetsData, isLoading, error, config, fetchSheetData, updateConfig]);
+    startPolling,
+    stopPolling,
+  }), [sheetsData, isLoading, error, config, fetchSheetData, updateConfig, startPolling, stopPolling]);
 
   useEffect(() => {
     console.log('GoogleSheetsContext initialized with config:', config);
     if (config.spreadsheetId) {
+      console.log('Fetching data for spreadsheet:', config.spreadsheetId, 'range:', config.range);
       fetchSheetData(config.spreadsheetId, config.range);
+      
+      // Start automatic polling
+      startPolling();
     } else {
       console.log('No spreadsheet ID configured, using fallback data');
     }
-  }, [config.spreadsheetId, config.range, fetchSheetData]);
+    
+    // Cleanup polling on unmount
+    return () => {
+      stopPolling();
+    };
+  }, [config.spreadsheetId, config.range, fetchSheetData, startPolling, stopPolling]);
 
   return (
     <GoogleSheetsContext.Provider value={contextValue}>
