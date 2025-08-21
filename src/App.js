@@ -19,6 +19,7 @@ import {
   useMediaQuery,
   CircularProgress,
   Fade,
+  Alert,
 } from '@mui/material';
 import {
   SportsTennis,
@@ -37,6 +38,53 @@ import WomensMatches from './components/WomensMatches';
 import MensLeaderboard from './components/MensLeaderboard';
 import WomensLeaderboard from './components/WomensLeaderboard';
 import LoadingSpinner from './components/LoadingSpinner';
+import TestComponent from './components/TestComponent';
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallback error={this.state.error} />;
+    }
+    return this.props.children;
+  }
+}
+
+const ErrorFallback = ({ error }) => (
+  <Box sx={{ p: 3, textAlign: 'center' }}>
+    <Alert severity="error" sx={{ mb: 2 }}>
+      Something went wrong loading this page
+    </Alert>
+    <Typography variant="body2" color="text.secondary">
+      Error: {error?.message || 'Unknown error'}
+    </Typography>
+  </Box>
+);
+
+// Simple Fallback Component
+const FallbackComponent = () => (
+  <Box sx={{ p: 3, textAlign: 'center' }}>
+    <Typography variant="h5" sx={{ mb: 2 }}>
+      Welcome to Tennis League
+    </Typography>
+    <Typography variant="body1" color="text.secondary">
+      Select a page from the menu to get started.
+    </Typography>
+  </Box>
+);
 
 // Create theme
 const theme = createTheme({
@@ -180,6 +228,12 @@ const drawerWidth = 280;
 
 const menuItems = [
   {
+    text: "Test Page",
+    icon: <Person />,
+    component: TestComponent,
+    path: 'test'
+  },
+  {
     text: "Men's Players",
     icon: <Person />,
     component: MensPlayers,
@@ -221,10 +275,16 @@ const menuItems = [
 const PageLoader = () => <LoadingSpinner message="Loading page..." />;
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('mens-players');
+  const [currentPage, setCurrentPage] = useState('test');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('App component mounted');
+    console.log('Available menu items:', menuItems.map(item => ({ path: item.path, component: item.component?.name })));
+  }, []);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -247,8 +307,20 @@ function App() {
   }, [currentPage, isMobile]);
 
   const getCurrentComponent = useMemo(() => {
-    const menuItem = menuItems.find(item => item.path === currentPage);
-    return menuItem ? menuItem.component : MensPlayers;
+    try {
+      console.log('Loading component for page:', currentPage);
+      const menuItem = menuItems.find(item => item.path === currentPage);
+      if (menuItem && menuItem.component) {
+        console.log('Found component:', menuItem.component.name);
+        return menuItem.component;
+      } else {
+        console.log('No component found, using fallback');
+        return FallbackComponent;
+      }
+    } catch (error) {
+      console.error('Error loading component:', error);
+      return FallbackComponent;
+    }
   }, [currentPage]);
 
   const drawer = useMemo(() => (
@@ -434,7 +506,9 @@ function App() {
             <Fade in={!isPageTransitioning} timeout={200}>
               <Box>
                 <Suspense fallback={<PageLoader />}>
-                  <CurrentComponent />
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <CurrentComponent />
+                  </ErrorBoundary>
                 </Suspense>
               </Box>
             </Fade>
