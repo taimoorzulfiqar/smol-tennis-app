@@ -6,9 +6,7 @@ import { GoogleSheetsProvider } from './context/GoogleSheetsContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <GoogleSheetsProvider>
-      <App />
-    </GoogleSheetsProvider>
-  </React.StrictMode>
+  <GoogleSheetsProvider>
+    <App />
+  </GoogleSheetsProvider>
 );

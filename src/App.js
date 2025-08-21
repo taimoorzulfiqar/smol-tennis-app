@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, Suspense } from 'react';
 import {
   Box,
   AppBar,
@@ -17,6 +17,8 @@ import {
   Divider,
   IconButton,
   useMediaQuery,
+  CircularProgress,
+  Fade,
 } from '@mui/material';
 import {
   SportsTennis,
@@ -34,6 +36,7 @@ import MensMatches from './components/MensMatches';
 import WomensMatches from './components/WomensMatches';
 import MensLeaderboard from './components/MensLeaderboard';
 import WomensLeaderboard from './components/WomensLeaderboard';
+import LoadingSpinner from './components/LoadingSpinner';
 
 // Create theme
 const theme = createTheme({
@@ -214,28 +217,41 @@ const menuItems = [
   }
 ];
 
+// Loading component for page transitions
+const PageLoader = () => <LoadingSpinner message="Loading page..." />;
+
 function App() {
   const [currentPage, setCurrentPage] = useState('mens-players');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleDrawerToggle = () => {
+  const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
-  };
+  }, [mobileOpen]);
 
-  const handlePageChange = (path) => {
+  const handlePageChange = useCallback((path) => {
+    if (path === currentPage) return; // Prevent unnecessary re-renders
+    
+    setIsPageTransitioning(true);
     setCurrentPage(path);
+    
     if (isMobile) {
       setMobileOpen(false);
     }
-  };
+    
+    // Add a small delay to show the transition
+    setTimeout(() => {
+      setIsPageTransitioning(false);
+    }, 100);
+  }, [currentPage, isMobile]);
 
-  const getCurrentComponent = () => {
+  const getCurrentComponent = useMemo(() => {
     const menuItem = menuItems.find(item => item.path === currentPage);
     return menuItem ? menuItem.component : MensPlayers;
-  };
+  }, [currentPage]);
 
-  const drawer = (
+  const drawer = useMemo(() => (
     <Box>
       <Box
         sx={{
@@ -321,9 +337,9 @@ function App() {
         ))}
       </List>
     </Box>
-  );
+  ), [currentPage, handlePageChange]);
 
-  const CurrentComponent = getCurrentComponent();
+  const CurrentComponent = getCurrentComponent;
 
   return (
     <ThemeProvider theme={theme}>
@@ -415,7 +431,13 @@ function App() {
         >
           <Toolbar /> {/* Spacer for fixed app bar */}
           <Container maxWidth="xl" sx={{ py: 3 }}>
-            <CurrentComponent />
+            <Fade in={!isPageTransitioning} timeout={200}>
+              <Box>
+                <Suspense fallback={<PageLoader />}>
+                  <CurrentComponent />
+                </Suspense>
+              </Box>
+            </Fade>
           </Container>
         </Box>
       </Box>
@@ -423,4 +445,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);

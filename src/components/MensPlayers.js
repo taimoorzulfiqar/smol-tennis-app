@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -29,8 +29,9 @@ import {
   Refresh,
 } from '@mui/icons-material';
 import { useGoogleSheets } from '../context/GoogleSheetsContext';
+import LoadingSpinner from './LoadingSpinner';
 
-const MensPlayers = () => {
+const MensPlayers = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -43,8 +44,8 @@ const MensPlayers = () => {
     }
   }, [config.spreadsheetId, fetchSheetData]);
 
-  // Get data from sheets or use fallback
-  const getPlayerData = () => {
+  // Get data from sheets or use fallback - memoized
+  const playerData = useMemo(() => {
     if (sheetsData.values && sheetsData.values.length > 0) {
       return sheetsData.values;
     }
@@ -61,23 +62,23 @@ const MensPlayers = () => {
       ['Hassan', '1', '1', '0', '6', 'Beginner'],
       ['Usman', '2', '0', '2', '3', 'Beginner']
     ];
-  };
+  }, [sheetsData.values]);
 
-  const playerData = getPlayerData();
-  const headers = playerData[0] || [];
-  const dataRows = playerData.slice(1) || [];
+  const headers = useMemo(() => playerData[0] || [], [playerData]);
+  const dataRows = useMemo(() => playerData.slice(1) || [], [playerData]);
 
-  const filteredData = dataRows.filter(row => 
-    row[0] && row[0].toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = useMemo(() => 
+    dataRows.filter(row => 
+      row[0] && row[0].toLowerCase().includes(searchTerm.toLowerCase())
+    ), [dataRows, searchTerm]);
 
-  const getWinRate = (won, lost) => {
+  const getWinRate = useCallback((won, lost) => {
     const total = parseInt(won) + parseInt(lost);
     if (total === 0) return '0%';
     return `${Math.round((parseInt(won) / total) * 100)}%`;
-  };
+  }, []);
 
-  const getCategoryColor = (category) => {
+  const getCategoryColor = useCallback((category) => {
     switch (category?.toLowerCase()) {
       case 'professional':
         return '#10b981';
@@ -94,18 +95,18 @@ const MensPlayers = () => {
       default:
         return '#6b7280';
     }
-  };
+  }, []);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage);
-  };
+  }, []);
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = useCallback((event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
+  }, []);
 
-  const getStats = () => {
+  const stats = useMemo(() => {
     if (dataRows.length === 0) return { totalPlayers: 0, totalMatches: 0, avgWinRate: 0 };
     
     const totalPlayers = dataRows.length;
@@ -115,22 +116,21 @@ const MensPlayers = () => {
     const avgWinRate = totalMatches > 0 ? Math.round((totalWins / (totalWins + totalLosses)) * 100) : 0;
     
     return { totalPlayers, totalMatches, avgWinRate };
-  };
+  }, [dataRows]);
 
-  const stats = getStats();
-
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     if (config.spreadsheetId) {
       fetchSheetData(config.spreadsheetId, 'Men!A:Z');
     }
-  };
+  }, [config.spreadsheetId, fetchSheetData]);
+
+  const handleSearchChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+    setPage(0); // Reset to first page when searching
+  }, []);
 
   if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress size={60} sx={{ color: 'primary.main' }} />
-      </Box>
-    );
+    return <LoadingSpinner message="Loading players data..." />;
   }
 
   return (
@@ -275,7 +275,7 @@ const MensPlayers = () => {
               size="small"
               placeholder="Search players..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearchChange}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -431,6 +431,8 @@ const MensPlayers = () => {
       </Box>
     </Box>
   );
-};
+});
+
+MensPlayers.displayName = 'MensPlayers';
 
 export default MensPlayers;
