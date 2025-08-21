@@ -27,22 +27,25 @@ const WomensMatches = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { sheetsData, isLoading, error, fetchSheetData, config } = useGoogleSheets();
+  const { sheetsData, isLoading, error, fetchSheetData, config, getDataForRange, clearDataForRange } = useGoogleSheets();
 
   // Fetch women's matches data
   useEffect(() => {
     if (config.spreadsheetId) {
+      // Clear any previous data to prevent showing stale data from other pages
+      clearDataForRange('Womens Matches!A:Z');
       // Use the correct sheet name: 'Womens Matches'
       fetchSheetData(config.spreadsheetId, 'Womens Matches!A:Z').catch(() => {
         console.log('Womens Matches sheet not found, using fallback data');
       });
     }
-  }, [config.spreadsheetId, fetchSheetData]);
+  }, [config.spreadsheetId, fetchSheetData, clearDataForRange]);
 
   // Get data from sheets or use fallback
   const getMatchData = () => {
-    if (sheetsData.values && sheetsData.values.length > 0) {
-      return sheetsData.values;
+    const womensMatchesData = getDataForRange('Womens Matches!A:Z');
+    if (womensMatchesData && womensMatchesData.values && womensMatchesData.values.length > 0) {
+      return womensMatchesData.values;
     }
     
          // Fallback data if no Google Sheets data

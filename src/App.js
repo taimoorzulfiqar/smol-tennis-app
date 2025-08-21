@@ -36,6 +36,7 @@ import WomensPlayers from './components/WomensPlayers';
 import MensMatches from './components/MensMatches';
 import WomensMatches from './components/WomensMatches';
 import LoadingSpinner from './components/LoadingSpinner';
+import { useGoogleSheets } from './context/GoogleSheetsContext';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -258,12 +259,17 @@ function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { clearSheets } = useGoogleSheets();
 
   // Debug logging
   React.useEffect(() => {
     console.log('App component mounted');
     console.log('Available menu items:', menuItems.map(item => ({ path: item.path, component: item.component?.name })));
   }, []);
+
+  React.useEffect(() => {
+    clearSheets();
+  }, [currentPage, clearSheets]);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -275,6 +281,9 @@ function App() {
     setIsPageTransitioning(true);
     setCurrentPage(path);
     
+    // Clear all sheet data immediately to prevent showing stale data
+    clearSheets();
+    
     if (isMobile) {
       setMobileOpen(false);
     }
@@ -283,7 +292,7 @@ function App() {
     setTimeout(() => {
       setIsPageTransitioning(false);
     }, 100);
-  }, [currentPage, isMobile]);
+  }, [currentPage, isMobile, clearSheets]);
 
   const getCurrentComponent = useMemo(() => {
     try {
@@ -482,15 +491,21 @@ function App() {
         >
           <Toolbar /> {/* Spacer for fixed app bar */}
           <Container maxWidth="xl" sx={{ py: 3 }}>
-            <Fade in={!isPageTransitioning} timeout={200}>
-              <Box>
-                <Suspense fallback={<PageLoader />}>
-                  <ErrorBoundary FallbackComponent={ErrorFallback}>
-                    <CurrentComponent />
-                  </ErrorBoundary>
-                </Suspense>
+            {isPageTransitioning ? (
+              <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <LoadingSpinner message="Loading page..." />
               </Box>
-            </Fade>
+            ) : (
+              <Fade in={!isPageTransitioning} timeout={200}>
+                <Box>
+                  <Suspense fallback={<PageLoader />}>
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <CurrentComponent />
+                    </ErrorBoundary>
+                  </Suspense>
+                </Box>
+              </Fade>
+            )}
           </Container>
         </Box>
       </Box>

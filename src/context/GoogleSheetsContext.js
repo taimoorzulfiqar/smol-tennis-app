@@ -13,10 +13,12 @@ export const useGoogleSheets = () => {
 };
 
 export const GoogleSheetsProvider = ({ children }) => {
+  // Store data for different ranges separately
   const [sheetsData, setSheetsData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dataCache, setDataCache] = useState(new Map());
+  const [currentRange, setCurrentRange] = useState(null);
   const [config, setConfig] = useState({
     spreadsheetId: configFile.spreadsheetId,
     apiKey: configFile.apiKey,
@@ -36,12 +38,17 @@ export const GoogleSheetsProvider = ({ children }) => {
     const cachedData = dataCache.get(cacheKey);
     
     if (!forceRefresh && cachedData && Date.now() - cachedData.timestamp < 30000) { // 30 second cache
-      setSheetsData(cachedData.data);
+      setSheetsData(prev => ({ ...prev, [range]: cachedData.data }));
+      setCurrentRange(range);
       return;
     }
     
     setIsLoading(true);
     setError(null);
+    
+    // Clear previous data for this range to prevent showing stale data
+    setSheetsData(prev => ({ ...prev, [range]: null }));
+    setCurrentRange(range);
     
     try {
       const params = new URLSearchParams({
@@ -64,8 +71,9 @@ export const GoogleSheetsProvider = ({ children }) => {
         timestamp: Date.now()
       })));
       
-      setSheetsData(response.data);
-      console.log('Successfully fetched data:', response.data);
+      // Store data for this specific range
+      setSheetsData(prev => ({ ...prev, [range]: response.data }));
+      console.log('Successfully fetched data for range:', range, response.data);
     } catch (err) {
       console.error('Error fetching sheet data:', err);
       // Only set error if it's not a 404 (sheet not found) error
@@ -79,6 +87,28 @@ export const GoogleSheetsProvider = ({ children }) => {
     }
   }, [config.useServiceAccount, config.apiKey, config.apiBaseUrl, dataCache]);
 
+  // Get current data for a specific range
+  const getDataForRange = useCallback((range) => {
+    return sheetsData[range] || null;
+  }, [sheetsData]);
+
+  // Clear data for a specific range
+  const clearDataForRange = useCallback((range) => {
+    setSheetsData(prev => {
+      const newData = { ...prev };
+      delete newData[range];
+      return newData;
+    });
+  }, []);
+
+  // Clear all sheet data
+  const clearSheets = useCallback(() => {
+    setSheetsData({});
+    setCurrentRange(null);
+    setError(null);
+    setIsLoading(false);
+  }, []);
+
   // Start automatic polling
   const startPolling = useCallback(() => {
     if (pollingIntervalRef.current) {
@@ -87,12 +117,12 @@ export const GoogleSheetsProvider = ({ children }) => {
     
     // Poll every 2 minutes (120000ms)
     pollingIntervalRef.current = setInterval(() => {
-      if (config.spreadsheetId) {
+      if (config.spreadsheetId && currentRange) {
         console.log('Auto-refreshing data from Google Sheets...');
-        fetchSheetData(config.spreadsheetId, config.range, true); // Force refresh
+        fetchSheetData(config.spreadsheetId, currentRange, true); // Force refresh
       }
     }, 120000); // 2 minutes
-  }, [config.spreadsheetId, config.range, fetchSheetData]);
+  }, [config.spreadsheetId, currentRange, fetchSheetData]);
 
   // Stop polling
   const stopPolling = useCallback(() => {
@@ -113,11 +143,15 @@ export const GoogleSheetsProvider = ({ children }) => {
     isLoading,
     error,
     config,
+    currentRange,
     fetchSheetData,
+    getDataForRange,
+    clearDataForRange,
+    clearSheets,
     updateConfig,
     startPolling,
     stopPolling,
-  }), [sheetsData, isLoading, error, config, fetchSheetData, updateConfig, startPolling, stopPolling]);
+  }), [sheetsData, isLoading, error, config, currentRange, fetchSheetData, getDataForRange, clearDataForRange, clearSheets, updateConfig, startPolling, stopPolling]);
 
   useEffect(() => {
     console.log('GoogleSheetsContext initialized with config:', config);

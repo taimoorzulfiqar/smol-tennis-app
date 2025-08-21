@@ -32,19 +32,22 @@ const WomensPlayers = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { sheetsData, isLoading, error, fetchSheetData, config } = useGoogleSheets();
+  const { sheetsData, isLoading, error, fetchSheetData, config, getDataForRange, clearDataForRange } = useGoogleSheets();
 
   // Fetch women's players data
   useEffect(() => {
     if (config.spreadsheetId) {
+      // Clear any previous data to prevent showing stale data from other pages
+      clearDataForRange('Women!A:Z');
       fetchSheetData(config.spreadsheetId, 'Women!A:Z');
     }
-  }, [config.spreadsheetId, fetchSheetData]);
+  }, [config.spreadsheetId, fetchSheetData, clearDataForRange]);
 
   // Get data from sheets or use fallback - memoized
   const playerData = useMemo(() => {
-    if (sheetsData.values && sheetsData.values.length > 0) {
-      return sheetsData.values;
+    const womenData = getDataForRange('Women!A:Z');
+    if (womenData && womenData.values && womenData.values.length > 0) {
+      return womenData.values;
     }
     
     // Fallback data if no Google Sheets data
@@ -59,7 +62,7 @@ const WomensPlayers = React.memo(() => {
       ['Rachel Lee', '1', '0', '1', '4', 'Beginner'],
       ['Michelle Taylor', '3', '1', '2', '11', 'Intermediate']
     ];
-  }, [sheetsData.values]);
+  }, [getDataForRange]);
 
   const headers = useMemo(() => playerData[0] || [], [playerData]);
   const dataRows = useMemo(() => playerData.slice(1) || [], [playerData]);
