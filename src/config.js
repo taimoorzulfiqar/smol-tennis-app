@@ -6,7 +6,11 @@
 // 2. Add your service account credentials to server/.env file (already done)
 // 3. Share your Google Sheet with the service account email
 // 4. The spreadsheet ID is already set to your Expert Tennis League sheet
-// 5. The range is set to 'Men!A:F' to read the Men's sheet with columns A-F
+// 5. The app will read from different sheets:
+//    - Men!A:Z for men's players data
+//    - Women!A:Z for women's players data  
+//    - MenMatches!A:Z for men's matches data
+//    - WomenMatches!A:Z for women's matches data
 //
 // ALTERNATIVE (API Key Method):
 // 1. Set useServiceAccount to false
@@ -19,8 +23,13 @@ const config = {
   // Your Google Sheet ID (found in the URL)
   spreadsheetId: '1LEk1FWjg2totERwT2lG-vQPlmeopktk6z3B8GU622jU',
   
-  // Sheet range (don't change this unless your data structure is different)
-  range: 'Men!A:F',
+  // Sheet ranges for different sections:
+  // - Men's Players: 'Men!A:Z'
+  // - Women's Players: 'Women!A:Z'
+  // - Men's Matches: 'MenMatches!A:Z'
+  // - Women's Matches: 'WomenMatches!A:Z'
+  // The default range is for men's players (legacy compatibility)
+  range: 'Men!A:Z',
   
   // Set to true to use Service Account (recommended), false to use API Key
   useServiceAccount: true
