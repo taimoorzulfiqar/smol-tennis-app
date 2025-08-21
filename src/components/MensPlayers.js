@@ -30,6 +30,7 @@ import {
 } from '@mui/icons-material';
 import { useGoogleSheets } from '../context/GoogleSheetsContext';
 import LoadingSpinner from './LoadingSpinner';
+import DebugInfo from './DebugInfo';
 
 const MensPlayers = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -135,6 +136,9 @@ const MensPlayers = React.memo(() => {
 
   return (
     <Box>
+      {/* Debug Info - Temporary for troubleshooting */}
+      <DebugInfo />
+      
       {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>

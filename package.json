@@ -24,6 +24,7 @@
     "@emotion/styled": "^11.11.0",
     "recharts": "^2.8.0"
   },
+  "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
       ">0.2%",
