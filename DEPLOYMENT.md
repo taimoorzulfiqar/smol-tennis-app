@@ -11,9 +11,9 @@
 
 ### **Step 2: Configure Environment Variables**
 
-In your Vercel project settings, add these environment variables:
+In your Vercel project settings, add this environment variable:
 
-#### **For Service Account (Recommended)**
+#### **Service Account Key (Required)**
 ```
 GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"sending-emails-468010",...}
 ```
@@ -24,39 +24,12 @@ GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"sending-email
 3. Add variable: `GOOGLE_SERVICE_ACCOUNT_KEY`
 4. Value: Paste the entire JSON content
 5. Select "Production" and "Preview" environments
+6. Click "Save"
 
-#### **For API Key (Alternative)**
-```
-GOOGLE_SHEETS_API_KEY=your_api_key_here
-```
-
-### **Step 3: Update Backend for Vercel**
-
-The backend needs to be updated to use environment variables instead of the JSON file. Update `server/server.js`:
-
-```javascript
-// Replace the service account loading with:
-if (useServiceAccount === 'true') {
-  try {
-    const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
-    
-    auth = new google.auth.GoogleAuth({
-      credentials: serviceAccount,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-  } catch (serviceAccountError) {
-    console.error('Service account error:', serviceAccountError);
-    return res.status(500).json({ 
-      error: 'Service account configuration error.' 
-    });
-  }
-}
-```
-
-### **Step 4: Deploy**
+### **Step 3: Deploy**
 
 1. **Push your changes** to GitHub
-2. **Vercel will automatically deploy** your app
+2. **Vercel will automatically deploy** your app using the updated configuration
 3. **Your app will be available** at: `https://your-app-name.vercel.app`
 
 ## 🔧 **Post-Deployment Setup**
@@ -75,14 +48,12 @@ if (useServiceAccount === 'true') {
 4. **Set permission**: "Editor" (or "Viewer")
 5. **Click "Send"**
 
-## 🎯 **Vercel Benefits**
+## 🎯 **What's Fixed**
 
-- ✅ **Automatic deployments** from GitHub
-- ✅ **Global CDN** for fast loading
-- ✅ **Serverless functions** for your API
-- ✅ **Environment variables** for secure configuration
-- ✅ **Custom domains** support
-- ✅ **Analytics** and monitoring
+- ✅ **Proper API routing** - API calls now go to `/api/sheets`
+- ✅ **Environment variables** - Consistent service account configuration
+- ✅ **Build configuration** - Both frontend and API routes properly configured
+- ✅ **CORS handling** - API routes handle cross-origin requests
 
 ## 🔒 **Security Notes**
 
@@ -108,9 +79,15 @@ if (useServiceAccount === 'true') {
 - Ensure the build script is correct
 - Verify the Vercel configuration is valid
 
+### **API not found errors**
+- Ensure your API calls go to `/api/sheets` (not `/api/sheets`)
+- Check that the API route is properly deployed in Vercel
+- Verify the route configuration in `vercel.json`
+
 ## 📞 **Need Help?**
 
 1. **Check Vercel logs** in the dashboard
 2. **Verify environment variables** are set correctly
 3. **Test locally** first with `npm run dev`
 4. **Check Google Cloud Console** for API usage and errors
+5. **Review deployment logs** in Vercel dashboard for specific error messages

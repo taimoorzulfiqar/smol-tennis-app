@@ -30,9 +30,11 @@ app.get('/api/sheets', async (req, res) => {
       try {
         let serviceAccount;
         
-        // Check if running on Vercel (environment variables) or local (file)
-        if (process.env.GOOGLE_SERVICE_ACCOUNT_TYPE) {
-          // Use individual environment variables
+        // Check if we have the service account key in environment variables
+        if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+          serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+        } else if (process.env.GOOGLE_SERVICE_ACCOUNT_TYPE) {
+          // Fallback to individual environment variables
           serviceAccount = {
             type: process.env.GOOGLE_SERVICE_ACCOUNT_TYPE,
             project_id: process.env.GOOGLE_SERVICE_ACCOUNT_PROJECT_ID,
@@ -47,6 +49,7 @@ app.get('/api/sheets', async (req, res) => {
             universe_domain: process.env.GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN
           };
         } else {
+          // Try to load from file (local development)
           const serviceAccountPath = path.join(__dirname, 'service-account-key.json');
           serviceAccount = require(serviceAccountPath);
         }
