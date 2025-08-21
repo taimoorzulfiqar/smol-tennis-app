@@ -9,8 +9,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "node start-app.js",
-    "server": "cd server && npm start",
-    "vercel-build": "npm run build"
+    "server": "cd server && npm start"
   },
   "dependencies": {
     "react": "^18.2.0",
